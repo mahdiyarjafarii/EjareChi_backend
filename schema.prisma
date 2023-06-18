@@ -2,3 +2,10 @@ datasource db {
   provider = "postgresql"
   url      = env("DB_URL")
 }
+
+model ingredients {
+  id    Int     @id @default(autoincrement())
+  title String  @unique @db.VarChar(255)
+  image String? @db.VarChar(255)
+  type  String  @default("vegetable") @db.VarChar(50)
+}
