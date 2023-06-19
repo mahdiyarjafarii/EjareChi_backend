@@ -3,9 +3,15 @@ datasource db {
   url      = env("DB_URL")
 }
 
-model ingredients {
-  id    Int     @id @default(autoincrement())
-  title String  @unique @db.VarChar(255)
-  image String? @db.VarChar(255)
-  type  String  @default("vegetable") @db.VarChar(50)
+model users {
+  id           Int     @id @default(autoincrement())
+  UID          String  @unique @db.VarChar(255)
+  name         String  @db.VarChar(255)
+  lastName     String? @db.VarChar(255)
+  email        String? @db.VarChar(255)
+  passwordHash String  @unique @db.VarChar(255)
 }
+
+// model products {
+
+// }
