@@ -2,9 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { PrismaService } from './insfrastructure/prisma/prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const prismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
 
   app.enableVersioning({
     type: VersioningType.URI,
