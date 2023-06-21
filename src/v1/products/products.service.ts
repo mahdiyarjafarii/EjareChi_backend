@@ -33,4 +33,32 @@ export class ProductsService {
     console.log({ products });
     return products;
   }
+  async updateProductService(
+    id: string,
+    {
+      description,
+      price,
+      category,
+      geoLocation,
+    }: Partial<Omit<ProductCreateReq, 'id' | 'ownerID'>>,
+  ) {
+    return this.prismaService.products.update({
+      where: {
+        id: id,
+      },
+      data: {
+        category,
+        description,
+        geoLocation,
+        price,
+      },
+    });
+  }
+  async deleteProductService(id: string) {
+    return this.prismaService.products.delete({
+      where: {
+        id: id,
+      },
+    });
+  }
 }
