@@ -10,7 +10,8 @@ import { ProductCreateReq } from './dtos/products.dto';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
   @Get()
-  getProducts(): string {
+  getAllProducts(): string {
+    this.productsService.getAllProductsService();
     return '';
   }
   @Get(':id')
@@ -18,8 +19,8 @@ export class ProductsController {
     return id;
   }
   @Post('/create')
-  createProduct(@Body() productDTO: ProductCreateReq): string {
-    return this.productsService.createProductService(productDTO);
+  async createProduct(@Body() productDTO: ProductCreateReq): Promise<string> {
+    return await this.productsService.createProductService(productDTO);
   }
   @Post('/update/:id')
   updateProduct(@Param('id') id: string): string {
