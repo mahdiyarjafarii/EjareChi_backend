@@ -1,1 +1,1 @@
-export type CategoriesType = 'a' | 'b';
+export type CategoriesType = 'electronics' | 'vehicles';

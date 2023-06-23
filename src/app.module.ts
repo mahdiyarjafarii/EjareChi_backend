@@ -7,8 +7,8 @@ import { ProductsModule } from './v1/products/products.module';
 import { PrismaModule } from './insfrastructure/prisma/prisma.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), ProductsModule, PrismaModule,AuthModule],
+  imports: [ConfigModule.forRoot(), ProductsModule, PrismaModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

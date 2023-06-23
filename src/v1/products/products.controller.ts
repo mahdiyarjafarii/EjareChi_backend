@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete } from '@nestjs/common';
+import { Controller, ParseUUIDPipe, Get, Post, Delete } from '@nestjs/common';
 import { Body, Param } from '@nestjs/common/decorators';
 import { ProductsService } from './products.service';
 import { ProductCreateReq } from './dtos/products.dto';
@@ -8,14 +8,14 @@ import { ProductCreateReq } from './dtos/products.dto';
   version: '1',
 })
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
   @Get()
   getAllProducts(): string {
     this.productsService.getAllProductsService();
     return '';
   }
   @Get(':id')
-  getProductByID(@Param('id') id: string): string {
+  getProductByID(@Param('id',ParseUUIDPipe) id: string): string {
     return id;
   }
   @Post('/create')
@@ -23,11 +23,11 @@ export class ProductsController {
     return await this.productsService.createProductService(productDTO);
   }
   @Post('/update/:id')
-  updateProduct(@Param('id') id: string): string {
+  updateProduct(@Param('id',ParseUUIDPipe) id: string): string {
     return id;
   }
   @Delete(':id')
-  deleteProduct(@Param('id') id: string): string {
+  deleteProduct(@Param('id',ParseUUIDPipe) id: string): string {
     return id;
   }
 }
