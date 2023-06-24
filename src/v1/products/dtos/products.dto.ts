@@ -25,6 +25,29 @@ export class ProductCreateReq {
   ownerID: string;
 }
 
+export class ProductUpdateReq {
+  @IsString()
+  @IsOptional()
+  name: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  //category: CategoriesType;
+  @IsString()
+  @IsOptional()
+  category: CategoriesType;
+
+  @IsNumber()
+  @IsOptional()
+  price: number;
+
+  @IsString()
+  @IsOptional()
+  geoLocation?: string;
+}
+
 export class ProductEntity {
   constructor(partial: Partial<ProductEntity>) {
     Object.assign(this, partial);
