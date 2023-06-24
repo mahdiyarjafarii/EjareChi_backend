@@ -1,6 +1,6 @@
 import { Controller,Get,Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserCreateReq } from './dtos/users.dto';
+import { UserCreateReq, UserLoginReq } from './dtos/users.dto';
 import { Body, Param } from '@nestjs/common/decorators';
 
 
@@ -13,18 +13,29 @@ export class AuthController {
 constructor(private readonly authServices:AuthService ){}
 //for login api
 @Get("/login")
-loginUser(){
-    return 'test login';
+loginUser(
+    @Body() userLoginDto:UserLoginReq
+){
+   const existingUser=this.authServices.findeByEmail(userLoginDto.email);
+   if(!existingUser){
+    return { message: 'user is not found!' };
+   }
+   
+
 
 }
 
 //for signup api
 @Post("signup")
 async signUpUser(
-    @Body() userDTO:UserCreateReq ,
+    @Body() userCreatDTO:UserCreateReq ,
 ){
- 
-    return await this.authServices.creatUser(userDTO)
+    const existingUser=this.authServices.findeByEmail(userCreatDTO.email);
+
+    if(existingUser){
+        return { message: 'Email already registered' };
+    }
+
 
 
 }
