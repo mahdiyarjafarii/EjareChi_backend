@@ -1,15 +1,29 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { VersioningType } from '@nestjs/common';
+import { VersioningType ,ValidationPipe} from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { PrismaService } from './insfrastructure/prisma/prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const prismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
+
+  //Enabling class-validator and class-transformer
+  app.useGlobalPipes(new ValidationPipe({
+      whitelist : true,
+      transform:true,
+      transformOptions:{
+        enableImplicitConversion:true
+      }
+  }))
+  //Enabling versioning
   app.enableVersioning({
     type: VersioningType.URI,
   });
 
+  //Configuring swagger
   const config = new DocumentBuilder()
     .setTitle('Rental')
     .setDescription('API tests')
