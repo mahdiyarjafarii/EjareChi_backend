@@ -1,33 +1,38 @@
 import { Controller, ParseUUIDPipe, Get, Post, Delete } from '@nestjs/common';
 import { Body, Param } from '@nestjs/common/decorators';
 import { ProductsService } from './products.service';
-import { ProductCreateReq } from './dtos/products.dto';
+import { ProductCreateReq, ProductEntity } from './dtos/products.dto';
 
 @Controller({
   path: 'products',
   version: '1',
 })
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) { }
+  constructor(private readonly productsService: ProductsService) {}
   @Get()
-  getAllProducts(): string {
-    this.productsService.getAllProductsService();
-    return '';
+  async getAllProducts(): Promise<ProductEntity[]> {
+    return await this.productsService.getAllProductsService();
   }
   @Get(':id')
-  getProductByID(@Param('id',ParseUUIDPipe) id: string): string {
-    return id;
+  async getProductByID(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ProductEntity> {
+    return await this.productsService.getProductByIDService(id);
   }
   @Post('/create')
-  async createProduct(@Body() productDTO: ProductCreateReq): Promise<string> {
+  async createProduct(
+    @Body() productDTO: ProductCreateReq,
+  ): Promise<ProductEntity> {
     return await this.productsService.createProductService(productDTO);
   }
   @Post('/update/:id')
-  updateProduct(@Param('id',ParseUUIDPipe) id: string): string {
+  updateProduct(@Param('id', ParseUUIDPipe) id: string): string {
     return id;
   }
   @Delete(':id')
-  deleteProduct(@Param('id',ParseUUIDPipe) id: string): string {
-    return id;
+  async deleteProduct(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ProductEntity> {
+    return await this.productsService.getProductByIDService(id);
   }
 }

@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { ProductCreateReq } from './dtos/products.dto';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { ProductCreateReq, ProductEntity } from './dtos/products.dto';
 import { PrismaService } from 'src/insfrastructure/prisma/prisma.service';
 
 @Injectable()
@@ -13,8 +13,17 @@ export class ProductsService {
     category,
     geoLocation,
     ownerID,
-  }: ProductCreateReq): Promise<string> {
-    const res = await this.prismaService.products.create({
+  }: ProductCreateReq): Promise<ProductEntity> {
+    console.log({
+      name,
+      description,
+      price,
+      category,
+      geoLocation,
+      ownerID,
+    });
+
+    const createdProduct = await this.prismaService.products.create({
       data: {
         name,
         category,
@@ -24,14 +33,33 @@ export class ProductsService {
         price,
       },
     });
-    console.log({ res });
 
-    return 'Hello World!';
+    return new ProductEntity(createdProduct);
   }
-  async getAllProductsService() {
+  async getAllProductsService(): Promise<ProductEntity[]> {
     const products = await this.prismaService.products.findMany();
-    console.log({ products });
-    return products;
+
+    if (products?.length) {
+      return products.map((product) => new ProductEntity(product));
+    } else {
+      throw new HttpException('Prodcuts Not Found', HttpStatus.NOT_FOUND);
+    }
+  }
+  async getProductByIDService(id: string): Promise<ProductEntity> {
+    const product = await this.prismaService.products.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    if (product) {
+      return new ProductEntity(product);
+    } else {
+      throw new HttpException(
+        `Prodcut with id#${id} Not Found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
   async updateProductService(
     id: string,
