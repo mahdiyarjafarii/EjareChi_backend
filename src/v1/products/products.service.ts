@@ -1,5 +1,9 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { ProductCreateReq, ProductEntity } from './dtos/products.dto';
+import {
+  ProductCreateReq,
+  ProductEntity,
+  ProductUpdateReq,
+} from './dtos/products.dto';
 import { PrismaService } from 'src/insfrastructure/prisma/prisma.service';
 
 @Injectable()
@@ -63,30 +67,38 @@ export class ProductsService {
   }
   async updateProductService(
     id: string,
-    {
-      description,
-      price,
-      category,
-      geoLocation,
-    }: Partial<Omit<ProductCreateReq, 'id' | 'ownerID'>>,
+    { name, description, price, category, geoLocation }: ProductUpdateReq,
   ) {
-    return this.prismaService.products.update({
-      where: {
-        id: id,
-      },
-      data: {
-        category,
-        description,
-        geoLocation,
-        price,
-      },
-    });
+    try {
+      const product = await this.prismaService.products.update({
+        where: {
+          id: id,
+        },
+        data: {
+          name,
+          category,
+          description,
+          geoLocation,
+          price,
+        },
+      });
+      return new ProductEntity(product);
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   }
-  async deleteProductService(id: string) {
-    return this.prismaService.products.delete({
-      where: {
-        id: id,
-      },
-    });
+  async deleteProductService(id: string): Promise<string> {
+    try {
+      await this.prismaService.products.delete({
+        where: {
+          id: id,
+        },
+      });
+      return `Product with id = ${id} deleted successfully`;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   }
 }
