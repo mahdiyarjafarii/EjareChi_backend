@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 export class AuthController {
 
 constructor(private readonly authServices:AuthService ){}
+
 //for login api
 @Post("login")
 async loginUser(
@@ -24,7 +25,8 @@ async loginUser(
    }
    const resultComapre= await bcrypt.compare(userLoginDto.password,existingUser.passwordHash );
    if(resultComapre){
-    return { message: 'welcome to our site' };
+   const token= await this.authServices.generateToken(existingUser.id);
+   return {"access_token":token}
    }else{
     return { message: 'password is not match' };
    }
@@ -43,7 +45,10 @@ async signUpUser(
         return { message: 'Email already registered' };
     }
 
-    return await this.authServices.creatUser(userCreatDTO);
+   const userCreated= await this.authServices.creatUser(userCreatDTO);
+   const token= await this.authServices.generateToken(userCreated.id);
+   return {"access_token":token}
+
 
 
 }
