@@ -1,5 +1,5 @@
 import { IsOptional, IsEnum, IsNumber, IsString } from 'class-validator';
-import { CategoriesType } from 'src/insfrastructure/global.type';
+import { CategoriesType } from 'src/infrastructure/global.type';
 
 export class ProductCreateReq {
   @IsString()
