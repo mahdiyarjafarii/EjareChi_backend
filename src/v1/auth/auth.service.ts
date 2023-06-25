@@ -7,24 +7,38 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
     constructor(private readonly prismaService: PrismaService){}
 
-    async creatUser({
+    async  creatUser({
         name,
         lastName,
         email ,
         password
     }:UserCreateReq
     ):Promise<UserEntity>{
-        const passwordHash=await bcrypt.hash(password,10)
-        const createduser=await this.prismaService.users.create({
-            data:{
-                name,
-                lastName,
-                email ,
-                passwordHash 
+        console.log({
+            name,
+            lastName,
+            email,
+            password
+        })
 
-            }
-        });
-        return new UserEntity(createduser);
+        try{
+            const passwordHash=await bcrypt.hash(password,process.env.SALT_BCRYPT)
+            const createduser=await this.prismaService.users.create({
+                data:{
+                    name,
+                    lastName,
+                    email ,
+                    passwordHash 
+    
+                }
+            });
+            return new UserEntity(createduser);
+        }catch(error){
+            console.log(error)
+            throw new Error(error);
+        }
+        // console.log(process.env.SALT_BCRYPT)
+ 
     }
 
     async findeByEmail(email:string):Promise<UserEntity |undefined>{

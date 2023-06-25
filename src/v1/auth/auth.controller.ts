@@ -1,7 +1,9 @@
 import { Controller,Get,Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserCreateReq, UserLoginReq } from './dtos/users.dto';
-import { Body, Param } from '@nestjs/common/decorators';
+import { Body } from '@nestjs/common/decorators';
+import * as bcrypt from 'bcrypt';
+
 
 
 @Controller({
@@ -12,13 +14,19 @@ export class AuthController {
 
 constructor(private readonly authServices:AuthService ){}
 //for login api
-@Get("/login")
-loginUser(
+@Post("login")
+async loginUser(
     @Body() userLoginDto:UserLoginReq
 ){
-   const existingUser=this.authServices.findeByEmail(userLoginDto.email);
+   const existingUser=await this.authServices.findeByEmail(userLoginDto.email);
    if(!existingUser){
     return { message: 'user is not found!' };
+   }
+   const resultComapre= await bcrypt.compare(userLoginDto.password,existingUser.passwordHash );
+   if(resultComapre){
+    return { message: 'welcome to our site' };
+   }else{
+    return { message: 'password is not match' };
    }
    
 
@@ -30,12 +38,12 @@ loginUser(
 async signUpUser(
     @Body() userCreatDTO:UserCreateReq ,
 ){
-    const existingUser=this.authServices.findeByEmail(userCreatDTO.email);
-
+    const existingUser=await this.authServices.findeByEmail(userCreatDTO.email);
     if(existingUser){
         return { message: 'Email already registered' };
     }
 
+    return await this.authServices.creatUser(userCreatDTO);
 
 
 }

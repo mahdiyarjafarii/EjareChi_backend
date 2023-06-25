@@ -11,8 +11,8 @@ model users {
   id           String  @id @default(uuid())
   name         String  @db.VarChar(255)
   lastName     String? @db.VarChar(255)
-  email        String? @db.VarChar(255)
-  passwordHash String  @unique @db.VarChar(255)
+  email        String? @unique @db.VarChar(255)
+  passwordHash String   @db.VarChar(255)
 }
 
 model products {

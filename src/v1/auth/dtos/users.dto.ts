@@ -35,6 +35,7 @@ export class UserEntity {
     name: string;
     lastName: string;
     email: string;
+    passwordHash:string
 
   }
   
