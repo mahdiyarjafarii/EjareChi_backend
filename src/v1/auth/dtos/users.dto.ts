@@ -16,3 +16,26 @@ export class UserCreateReq{
     password:string
 
 }
+export class UserLoginReq{
+
+    @IsEmail()
+    email :string
+
+    @IsString()
+    password:string
+
+}
+
+
+export class UserEntity {
+    constructor(partial: Partial<UserEntity>) {
+      Object.assign(this, partial);
+    }
+    id:string
+    name: string;
+    lastName: string;
+    email: string;
+    passwordHash:string
+
+  }
+  
