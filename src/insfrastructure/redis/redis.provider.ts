@@ -6,8 +6,8 @@ export const redisProvider: Provider<Redis> = {
     useFactory: (): Redis => {
       return new Redis({
         port: 6379, // Redis port
-        host: "stream.plotset.com", // Redis host
-        password: "ejarechii_redis",
+        host: process.env.HOST, // Redis host
+        password: process.env.REDIS_PASS,
       });
     },
   };
