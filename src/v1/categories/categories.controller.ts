@@ -8,7 +8,7 @@ import { CategoriesService } from './categories.service';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
   @Get()
-  getAllCategories(): string[] {
-    return this.categoriesService.getAllCategoriesService();
+  async getAllCategories(): Promise<string[]> {
+    return await this.categoriesService.getAllCategoriesService();
   }
 }

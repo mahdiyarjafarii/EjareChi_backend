@@ -6,6 +6,6 @@ export class CategoriesService {
   constructor(private readonly prismaService: PrismaService) {}
   async getAllCategoriesService(): Promise<string[]> {
     await this.prismaService.categories.findMany({});
-    return ['1.'];
+    return ['1'];
   }
 }

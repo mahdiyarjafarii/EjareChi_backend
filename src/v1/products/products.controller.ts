@@ -1,5 +1,5 @@
 import { Controller, ParseUUIDPipe, Get, Post, Delete } from '@nestjs/common';
-import { Body, Param } from '@nestjs/common/decorators';
+import { Body, Param, Query } from '@nestjs/common/decorators';
 import { ProductsService } from './products.service';
 import {
   ProductCreateReq,
@@ -14,8 +14,10 @@ import {
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
   @Get()
-  async getAllProducts(): Promise<ProductEntity[]> {
-    return await this.productsService.getAllProductsService();
+  async getAllProducts(
+    @Query('approved') approvedStatus?: boolean,
+  ): Promise<ProductEntity[]> {
+    return await this.productsService.getAllProductsService(approvedStatus);
   }
   @Get(':id')
   async getProductByID(
@@ -38,6 +40,12 @@ export class ProductsController {
       id,
       productUpdateDTO,
     );
+  }
+  @Post('/approve/:id')
+  async approveProduct(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ProductEntity> {
+    return await this.productsService.approveProductService(id);
   }
   @Delete(':id')
   async deleteProduct(@Param('id', ParseUUIDPipe) id: string): Promise<string> {

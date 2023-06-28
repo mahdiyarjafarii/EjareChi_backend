@@ -22,6 +22,7 @@ model products {
   category    String @db.VarChar(255)
   price       Float
   geoLocation String @db.VarChar(255)
+  approved    Boolean @default(false)
   ownerID     String
 }
 
