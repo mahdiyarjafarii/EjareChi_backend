@@ -20,13 +20,26 @@ export class AuthController {
     if (!existingUser) {
       return { message: 'user is not found!' };
     }
+    
     const resultComapre = await bcrypt.compare(
       userLoginDto.password,
       existingUser.passwordHash,
     );
     if (resultComapre) {
-      const token = await this.authServices.generateToken(existingUser.id);
-      return { access_token: token };
+      const cachedToken= await this.authServices.getTokenRedis(userLoginDto.email);
+      if(cachedToken){
+        console.log("use cached token")
+        return { access_token: cachedToken };
+
+      }else{
+        const token = await this.authServices.generateToken(existingUser.id);
+        await this.authServices.setTokenRedis(userLoginDto.email,token)
+        console.log("use fresh token")
+
+        return { access_token: token };
+
+      }
+
     } else {
       return { message: 'password is not match' };
     }
@@ -44,6 +57,16 @@ export class AuthController {
 
     const userCreated = await this.authServices.creatUser(userCreatDTO);
     const token = await this.authServices.generateToken(userCreated.id);
+    await this.authServices.setTokenRedis(userCreatDTO.email,token)
     return { access_token: token };
+  }
+
+
+
+  @Get('redis')
+  async testRedis(){
+     const result= await this.authServices.getTokenRedis("moein")
+     console.log(result)
+    // return this.authServices.getData("sss")
   }
 }

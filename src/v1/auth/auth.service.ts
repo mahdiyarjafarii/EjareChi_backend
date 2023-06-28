@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject  } from '@nestjs/common';
 import { PrismaService } from 'src/insfrastructure/prisma/prisma.service';
 import { UserCreateReq, UserEntity } from './dtos/users.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Redis } from 'ioredis';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly prismaService: PrismaService,
-        private readonly jwtService:JwtService
+        private readonly jwtService:JwtService,
+        @Inject('REDIS_CLIENT') private readonly redisClient: Redis
         ){}
 
     async creatUser({
@@ -56,5 +58,33 @@ export class AuthService {
     async generateToken(userId:string):Promise<string>{
         const payload = { sub: userId };
         return await this.jwtService.signAsync(payload)
+    }
+
+    async setTokenRedis(key:string,token:string):Promise<string>{
+        try{
+            const cachedData = await this.redisClient.set(key,token);
+            const expireResult = await this.redisClient.expire(key, 84600);
+        
+    
+            return cachedData
+        }catch(e){
+            console.error(e)
+        }
+
+    
+          
+       
+    }
+
+
+    async getTokenRedis(key:string):Promise<string>{
+        try{
+            const cachedData = await this.redisClient.get(key)
+    
+            return cachedData
+        }catch(e){
+            console.error(e)
+        }
+
     }
 }
