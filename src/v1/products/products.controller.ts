@@ -41,6 +41,7 @@ export class ProductsController {
       productUpdateDTO,
     );
   }
+  //Guard
   @Post('/approve/:id')
   async approveProduct(
     @Param('id', ParseUUIDPipe) id: string,
