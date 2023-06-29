@@ -40,8 +40,18 @@ export class ProductsService {
 
     return new ProductEntity(createdProduct);
   }
-  async getAllProductsService(): Promise<ProductEntity[]> {
-    const products = await this.prismaService.products.findMany();
+  async getAllProductsService(
+    approvedStatus?: boolean,
+  ): Promise<ProductEntity[]> {
+    const searchQueryObj = {
+      ...(approvedStatus && {
+        approved: approvedStatus,
+      }),
+    };
+
+    const products = await this.prismaService.products.findMany({
+      where: searchQueryObj,
+    });
 
     if (products?.length) {
       return products.map((product) => new ProductEntity(product));
@@ -80,6 +90,22 @@ export class ProductsService {
           description,
           geoLocation,
           price,
+        },
+      });
+      return new ProductEntity(product);
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+  async approveProductService(id: string) {
+    try {
+      const product = await this.prismaService.products.update({
+        where: {
+          id: id,
+        },
+        data: {
+          approved: true,
         },
       });
       return new ProductEntity(product);
