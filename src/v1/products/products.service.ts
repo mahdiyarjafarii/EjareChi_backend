@@ -4,7 +4,7 @@ import {
   ProductEntity,
   ProductUpdateReq,
 } from './dtos/products.dto';
-import { PrismaService } from 'src/insfrastructure/prisma/prisma.service';
+import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
 
 @Injectable()
 export class ProductsService {
