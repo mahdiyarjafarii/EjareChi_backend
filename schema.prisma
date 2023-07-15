@@ -7,26 +7,52 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
+
 model users {
   id           String  @id @default(uuid())
   name         String  @db.VarChar(255)
   lastName     String? @db.VarChar(255)
   email        String? @unique @db.VarChar(255)
   passwordHash String   @db.VarChar(255)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime @updatedAt
+  user_type     userType
+  pruducts      products[]
+ 
 }
 
 model products {
-  id          String @id @default(uuid())
-  name        String @db.VarChar(255)
-  description String @db.Text()
-  category    String @db.VarChar(255)
-  price       Float
-  geoLocation String @db.VarChar(255)
-  approved    Boolean @default(false)
-  ownerID     String
+  id           String @id @default(uuid())
+  name         String @db.VarChar(255)
+  description  String @db.Text()
+  category     String @db.VarChar(255)
+  price        Float
+  geoLocation  String @db.VarChar(255) 
+  approved     Boolean @default(false)
+  user_id       String
+  user          users @relation(fields: [user_id],references: [id])
+  images       image[]
+  created_at   DateTime  @default(now())
+  updated_at   DateTime @updatedAt
+}
+
+model image{
+  id           String @id @default(uuid())
+  url          String
+  product_id   String 
+  product      products @relation(fields: [product_id],references: [id])
+  created_at   DateTime  @default(now())
+  updated_at   DateTime @updatedAt
 }
 
 model categories {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(255)
+}
+
+
+enum userType{
+  ADMIN
+  NOTADMIN
 }
