@@ -17,7 +17,7 @@ model users {
   passwordHash String   @db.VarChar(255)
   created_at   DateTime  @default(now())
   updated_at   DateTime @updatedAt
-  user_type     userType
+  user_type     userType @default(NOTADMIN)
   pruducts      products[]
  
 }

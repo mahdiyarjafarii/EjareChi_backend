@@ -16,7 +16,7 @@ export class ProductsService {
     price,
     category,
     geoLocation,
-    ownerID,
+    user_id,
   }: ProductCreateReq): Promise<ProductEntity> {
     console.log({
       name,
@@ -24,7 +24,7 @@ export class ProductsService {
       price,
       category,
       geoLocation,
-      ownerID,
+      user_id,
     });
 
     const createdProduct = await this.prismaService.products.create({
@@ -33,7 +33,7 @@ export class ProductsService {
         category,
         description,
         geoLocation,
-        ownerID,
+        user_id ,
         price,
       },
     });

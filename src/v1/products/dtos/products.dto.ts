@@ -22,7 +22,7 @@ export class ProductCreateReq {
   geoLocation?: string;
 
   @IsString()
-  ownerID: string;
+  user_id: string;
 }
 
 export class ProductUpdateReq {
