@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import {
   ProductCreateReq,
   ProductEntity,
@@ -16,8 +16,8 @@ export class ProductsService {
     price,
     category,
     geoLocation,
-    user_id,
-  }: ProductCreateReq): Promise<ProductEntity> {
+   
+  }: ProductCreateReq,user_id:string): Promise<ProductEntity> {
     console.log({
       name,
       description,
@@ -126,5 +126,27 @@ export class ProductsService {
       console.log(error);
       throw new Error(error);
     }
+  }
+
+  async getUserIdByhomeId(id:string){
+    const user=await this.prismaService.products.findUnique({
+      where:{
+        id,
+      },
+      select:{
+        user:{
+          select:{
+            name:true,
+            id:true,
+            email:true,
+          }
+        }
+      }
+    })
+
+    if(!user){
+      throw new NotFoundException();
+    }
+    return user.user;
   }
 }
