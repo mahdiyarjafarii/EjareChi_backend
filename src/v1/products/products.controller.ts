@@ -1,4 +1,4 @@
-import { Controller, ParseUUIDPipe, Get, Post, Delete, UnauthorizedException } from '@nestjs/common';
+import { Controller, ParseUUIDPipe, Get, Post, Delete, UnauthorizedException,UseGuards } from '@nestjs/common';
 import { Body, Param, Put, Query } from '@nestjs/common/decorators';
 import { ProductsService } from './products.service';
 import {
@@ -7,6 +7,9 @@ import {
   ProductUpdateReq,
 } from './dtos/products.dto';
 import { User, UserType } from '../decorators/user.decorator';
+import { userType } from '@prisma/client';
+import { Roles } from '../decorators/roles.decorator';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 
 
@@ -56,21 +59,22 @@ export class ProductsController {
     if(userCreator.id!==user.userId){
       throw new UnauthorizedException();
     }
-    }catch(error){
-      throw new UnauthorizedException();
-      
-    }
+  }catch(error){
+    throw new UnauthorizedException();
+    
+  }
+  return await this.productsService.updateProductService(
+    id,
+    productUpdateDTO,
+  );
+}
 
    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 
 
-    return await this.productsService.updateProductService(
-      id,
-      productUpdateDTO,
-    );
-  }
-
-  //Guard
+  @Roles(userType.ADMIN)
+  @UseGuards(AuthGuard)
   @Post('/approve/:id')
   async approveProduct(
     @Param('id', ParseUUIDPipe) id: string,
@@ -78,6 +82,8 @@ export class ProductsController {
     return await this.productsService.approveProductService(id);
   }
 
+  @Roles(userType.ADMIN)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteProduct(@Param('id', ParseUUIDPipe) id: string, @User() user?:UserType): Promise<string> {
 
