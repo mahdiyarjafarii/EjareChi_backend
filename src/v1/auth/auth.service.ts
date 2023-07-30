@@ -56,8 +56,8 @@ export class AuthService {
         })
     }
 
-    async generateToken(userId:string,user_type:string):Promise<string>{
-        const payload = {userId,user_type};
+    async generateToken(userId:string):Promise<string>{
+        const payload = {userId};
        
         const token= await jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:81000})
         return token

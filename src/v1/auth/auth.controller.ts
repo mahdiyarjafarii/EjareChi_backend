@@ -34,7 +34,7 @@ export class AuthController {
         return { access_token: cachedToken };
 
       }else{
-        const token = await this.authServices.generateToken(existingUser.id,existingUser.user_type);
+        const token = await this.authServices.generateToken(existingUser.id);
         await this.authServices.setTokenRedis(userLoginDto.email,token)
         console.log("use fresh token")
 
@@ -58,7 +58,7 @@ export class AuthController {
     }
 
     const userCreated = await this.authServices.creatUser(userCreatDTO);
-    const token = await this.authServices.generateToken(userCreated.id,"NOTADMIN");
+    const token = await this.authServices.generateToken(userCreated.id);
     await this.authServices.setTokenRedis(userCreatDTO.email,token)
     return { access_token: token };
   }

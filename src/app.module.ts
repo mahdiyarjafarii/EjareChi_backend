@@ -7,7 +7,8 @@ import { ProductsModule } from './v1/products/products.module';
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { UserInterceptor } from './v1/interceptors/user.interceptor';
 // import { SearchModule } from './infrastructure/elasticsearch/elasticsearch.module';
-import {APP_INTERCEPTOR} from "@nestjs/core"
+import {APP_GUARD, APP_INTERCEPTOR} from "@nestjs/core"
+import { AuthGuard } from './guards/auth.guard';
 
 
 
@@ -23,6 +24,9 @@ import {APP_INTERCEPTOR} from "@nestjs/core"
   providers: [AppService,{
     provide:APP_INTERCEPTOR,
     useClass:UserInterceptor
+  },{
+    provide:APP_GUARD,
+    useClass:AuthGuard
   }],
 })
 export class AppModule { }

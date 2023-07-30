@@ -21,6 +21,8 @@ import { AuthGuard } from 'src/guards/auth.guard';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+
+  @Roles(userType.NOTADMIN,userType.ADMIN)
   @Get( )
   async getAllProducts(
     @Query('approved') approvedStatus?: boolean,
@@ -30,6 +32,11 @@ export class ProductsController {
     
     return await this.productsService.getAllProductsService(approvedStatus);
   }
+
+
+
+
+  @Roles(userType.NOTADMIN,userType.ADMIN)
   @Get(':id')
   async getProductByID(
     @Param('id', ParseUUIDPipe) id: string,
@@ -37,6 +44,11 @@ export class ProductsController {
     return await this.productsService.getProductByIDService(id);
   }
 
+
+
+
+
+  @Roles(userType.NOTADMIN,userType.ADMIN)
   @Post('/create')
   async createProduct(
     @Body() productDTO: ProductCreateReq,
@@ -45,6 +57,13 @@ export class ProductsController {
     return await this.productsService.createProductService(productDTO,user.userId);
   }
 
+
+
+
+
+
+
+  @Roles(userType.NOTADMIN,userType.ADMIN)
   @Put('/update/:id')
   async updateProduct(
     @Param('id', ParseUUIDPipe) id: string,
@@ -73,8 +92,9 @@ export class ProductsController {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 
 
+
+
   @Roles(userType.ADMIN)
-  @UseGuards(AuthGuard)
   @Post('/approve/:id')
   async approveProduct(
     @Param('id', ParseUUIDPipe) id: string,
@@ -82,8 +102,10 @@ export class ProductsController {
     return await this.productsService.approveProductService(id);
   }
 
-  @Roles(userType.ADMIN)
-  @UseGuards(AuthGuard)
+
+
+  
+  @Roles(userType.NOTADMIN,userType.ADMIN)
   @Delete(':id')
   async deleteProduct(@Param('id', ParseUUIDPipe) id: string, @User() user?:UserType): Promise<string> {
 
