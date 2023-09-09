@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, HttpException, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserCreateReq, UserLoginReq } from './dtos/users.dto';
 import { Body } from '@nestjs/common/decorators';
@@ -20,7 +20,7 @@ export class AuthController {
       userLoginDto.email,
     );
     if (!existingUser) {
-      return { message: 'user is not found!' };
+      throw new HttpException('user is notfound', 401);
     }
     
     const resultComapre = await bcrypt.compare(
@@ -43,7 +43,8 @@ export class AuthController {
       }
 
     } else {
-      return { message: 'password is not match' };
+      throw new HttpException('Password is not match', 401);
+      // return { message: 'password is not match' };
     }
   }
 
@@ -54,7 +55,7 @@ export class AuthController {
       userCreatDTO.email,
     );
     if (existingUser) {
-      return { message: 'Email already registered' };
+       throw new HttpException('Email already registered', 401);
     }
 
     const userCreated = await this.authServices.creatUser(userCreatDTO);
