@@ -1,7 +1,7 @@
 import { IsOptional, IsEnum, IsNumber, IsString } from 'class-validator';
 import { CategoriesType } from 'src/infrastructure/global.type';
 
-export class ProductCreateReq {
+export class RentalCreateReq {
   @IsString()
   name: string;
 
@@ -22,7 +22,7 @@ export class ProductCreateReq {
   geoLocation?: string;
 }
 
-export class ProductUpdateReq {
+export class RentalUpdateReq {
   @IsString()
   @IsOptional()
   name: string;
@@ -45,8 +45,8 @@ export class ProductUpdateReq {
   geoLocation?: string;
 }
 
-export class ProductEntity {
-  constructor(partial: Partial<ProductEntity>) {
+export class RentalEntity {
+  constructor(partial: Partial<RentalEntity>) {
     Object.assign(this, partial);
   }
   id: string;

@@ -1,58 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DB_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-
-
 model users {
-  id           String  @id @default(uuid())
-  name         String  @db.VarChar(255)
-  lastName     String? @db.VarChar(255)
-  email        String? @unique @db.VarChar(255)
-  passwordHash String   @db.VarChar(255)
+  id           String    @id @default(uuid())
+  name         String    @db.VarChar(255)
+  lastName     String?   @db.VarChar(255)
+  email        String?   @unique @db.VarChar(255)
+  passwordHash String    @db.VarChar(255)
   created_at   DateTime  @default(now())
-  updated_at   DateTime @updatedAt
-  user_type     userType @default(NOTADMIN)
-  pruducts      products[]
- 
+  updated_at   DateTime  @updatedAt
+  user_type    userType  @default(NOTADMIN)
+  pruducts     rentals[]
 }
 
-model products {
-  id           String @id @default(uuid())
-  name         String @db.VarChar(255)
-  description  String @db.Text()
-  category     String @db.VarChar(255)
-  price        Float
-  geoLocation  String @db.VarChar(255) 
-  approved     Boolean @default(false)
-  user_id       String
-  user          users @relation(fields: [user_id],references: [id])
-  images       image[]
-  created_at   DateTime  @default(now())
-  updated_at   DateTime @updatedAt
+model rentals {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(255)
+  description String
+  category    String   @db.VarChar(255)
+  price       Float
+  geoLocation String   @db.VarChar(255)
+  approved    Boolean  @default(false)
+  user_id     String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  latitude    Float    @default(35.7219)
+  longitude   Float    @default(51.3347)
+  images      image[]
+  user        users    @relation(fields: [user_id], references: [id])
 }
 
-model image{
-  id           String @id @default(uuid())
-  url          String
-  product_id   String 
-  product      products @relation(fields: [product_id],references: [id])
-  created_at   DateTime  @default(now())
-  updated_at   DateTime @updatedAt
+model image {
+  id         String   @id @default(uuid())
+  url        String
+  product_id String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  product    rentals  @relation(fields: [product_id], references: [id])
 }
 
-model categories {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
+model Category {
+  category_id        Int                 @id @default(autoincrement())
+  name               String
+  icon_name          String?
+  parent_category_id Int?
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
+  // Define a self-referential relationship for subcategories
+  // subcategories Category[] @relation("ParentCategoryToSubcategory")
+  // parent_category Category? @relation("ParentCategoryToSubcategory", fields: [parent_category_id], references: [category_id])
+  CategoryAttribute  CategoryAttribute[]
 }
 
+model CategoryAttribute {
+  id         Int      @id @default(autoincrement())
+  name       String
+  dataType   String // This field stores the data type (e.g., "integer", "boolean")
+  required   Boolean  @default(false)
+  category   Category @relation(fields: [categoryId], references: [category_id])
+  categoryId Int
+  // Add other relevant fields, such as validation rules or descriptions
+}
 
-enum userType{
+// TODO : 
+// Category_Types = "car" | "bike" 
+
+enum userType {
   ADMIN
   NOTADMIN
 }
