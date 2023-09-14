@@ -93,7 +93,7 @@ export class RentalController {
       //for finde creator of home with id in query
       const userCreator = await this.rentalService.getUserIdByhomeId(id);
       //for check the creator prodcuts is equal to jwt request
-      if (userCreator.id !== user.userId) {
+      if (userCreator.user_id !== user.userId) {
         throw new UnauthorizedException();
       }
     } catch (error) {
@@ -120,7 +120,7 @@ export class RentalController {
       //for finde creator of home with id in query
       const userCreator = await this.rentalService.getUserIdByhomeId(id);
       //for check the creator prodcuts is equal to jwt request
-      if (userCreator.id !== user.userId) {
+      if (userCreator.user_id !== user.userId) {
         throw new UnauthorizedException();
       }
 

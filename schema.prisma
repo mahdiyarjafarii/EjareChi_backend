@@ -8,7 +8,7 @@ datasource db {
 }
 
 model users {
-  id           String    @id @default(uuid())
+  user_id           String    @id @default(uuid())
   name         String    @db.VarChar(255)
   lastName     String?   @db.VarChar(255)
   email        String?   @unique @db.VarChar(255)
@@ -20,29 +20,28 @@ model users {
 }
 
 model rentals {
-  id          String   @id @default(uuid())
+  rental_id   String   @id @default(uuid())
   name        String   @db.VarChar(255)
   description String
-  category    String   @db.VarChar(255)
+  category_id Int
   price       Float
-  geoLocation String   @db.VarChar(255)
   approved    Boolean  @default(false)
   user_id     String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
   latitude    Float    @default(35.7219)
   longitude   Float    @default(51.3347)
-  images      image[]
-  user        users    @relation(fields: [user_id], references: [id])
+  user        users    @relation(fields: [user_id], references: [user_id])
+  category    Category @relation(fields: [category_id], references: [category_id])
+  images      RentalImages[] 
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 }
 
-model image {
-  id         String   @id @default(uuid())
-  url        String
-  product_id String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  product    rentals  @relation(fields: [product_id], references: [id])
+model RentalImages {
+  image_id         String   @id @default(uuid())
+  rental_id        String
+  // image_data can be blob or absolute path to image
+  image_data       String
+  rentals          rentals  @relation(fields: [rental_id],references: [rental_id])
 }
 
 model Category {
@@ -56,6 +55,7 @@ model Category {
   // subcategories Category[] @relation("ParentCategoryToSubcategory")
   // parent_category Category? @relation("ParentCategoryToSubcategory", fields: [parent_category_id], references: [category_id])
   CategoryAttribute  CategoryAttribute[]
+  rentals            rentals[]
 }
 
 model CategoryAttribute {

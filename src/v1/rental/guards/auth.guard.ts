@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate {
         )) as payloadJWT;
         const user = await this.prismaservice.users.findUnique({
           where: {
-            id: payload.userId,
+            user_id: payload.userId,
           },
         });
 

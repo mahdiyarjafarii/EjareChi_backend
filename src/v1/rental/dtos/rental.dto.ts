@@ -10,9 +10,9 @@ export class RentalCreateReq {
   description?: string;
 
   //category: CategoriesType;
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  category: CategoriesType;
+  category_id: number;
 
   @IsNumber()
   price: number;
@@ -32,9 +32,9 @@ export class RentalUpdateReq {
   description?: string;
 
   //category: CategoriesType;
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  category: CategoriesType;
+  category_id: number;
 
   @IsNumber()
   @IsOptional()
@@ -52,8 +52,9 @@ export class RentalEntity {
   id: string;
   name: string;
   description: string;
-  category: string;
+  category_id: number;
   price: number;
-  geoLocation: string;
+  latitude: number;
+  longitude: number;
   ownerID: string;
 }

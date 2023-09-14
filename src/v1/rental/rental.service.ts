@@ -16,14 +16,14 @@ export class RentalService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async createRentalService(
-    { name, description, price, category, geoLocation }: RentalCreateReq,
+    { name, description, price, category_id, geoLocation }: RentalCreateReq,
     user_id: string,
   ): Promise<RentalEntity> {
     console.log({
       name,
       description,
       price,
-      category,
+      category_id,
       geoLocation,
       user_id,
     });
@@ -31,9 +31,8 @@ export class RentalService {
     const createdRental = await this.prismaService.rentals.create({
       data: {
         name,
-        category,
+        category_id,
         description,
-        geoLocation,
         user_id,
         price,
       },
@@ -63,7 +62,7 @@ export class RentalService {
   async getRentalByIDService(id: string): Promise<RentalEntity> {
     const Rental = await this.prismaService.rentals.findFirst({
       where: {
-        id: id,
+        rental_id: id,
       },
     });
 
@@ -78,18 +77,17 @@ export class RentalService {
   }
   async updateRentalService(
     id: string,
-    { name, description, price, category, geoLocation }: RentalUpdateReq,
+    { name, description, price, category_id, geoLocation }: RentalUpdateReq,
   ) {
     try {
       const Rental = await this.prismaService.rentals.update({
         where: {
-          id: id,
+          rental_id: id,
         },
         data: {
           name,
-          category,
+          category_id,
           description,
-          geoLocation,
           price,
         },
       });
@@ -103,7 +101,7 @@ export class RentalService {
     try {
       const Rental = await this.prismaService.rentals.update({
         where: {
-          id: id,
+          rental_id: id,
         },
         data: {
           approved: true,
@@ -119,7 +117,7 @@ export class RentalService {
     try {
       await this.prismaService.rentals.delete({
         where: {
-          id: id,
+          rental_id: id,
         },
       });
       return `Rental with id = ${id} deleted successfully`;
@@ -131,13 +129,13 @@ export class RentalService {
   async getUserIdByhomeId(id: string) {
     const user = await this.prismaService.rentals.findUnique({
       where: {
-        id,
+        rental_id : id,
       },
       select: {
         user: {
           select: {
             name: true,
-            id: true,
+            user_id: true,
             email: true,
           },
         },
