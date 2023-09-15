@@ -35,7 +35,7 @@ import { Roles } from '../decorators/roles.decorator';
 export class RentalController {
   constructor(private readonly rentalService: RentalService) {}
 
-  @Roles(userType.NOTADMIN, userType.ADMIN)
+  // @Roles(userType.NOTADMIN, userType.ADMIN)
   @Get()
   async getAllRental(
     @Query('approved') approvedStatus?: boolean,
