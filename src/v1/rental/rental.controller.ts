@@ -72,13 +72,22 @@ export class RentalController {
 
   @Roles(userType.NOTADMIN, userType.ADMIN)
   @Post('/create')
+  @UseInterceptors(
+    FilesInterceptor('images', 7, {
+      dest: './uploads',
+    }),
+  )
   async createRental(
+    @UploadedFiles() images: Array<Express.Multer.File>,
     @Body() productDTO: RentalCreateReq,
     @User() user?: UserType,
   ): Promise<RentalEntity> {
+    console.log({images});
+    console.log({productDTO});
+    let testID = "a7afb7d62e61"
     return await this.rentalService.createRentalService(
       productDTO,
-      user.userId,
+      testID,
     );
   }
 

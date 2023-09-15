@@ -13,10 +13,10 @@ import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
 
 @Injectable()
 export class RentalService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async createRentalService(
-    { name, description, price, category_id, geoLocation }: RentalCreateReq,
+    { name, description, price, category_id, latitude, longitude }: RentalCreateReq,
     user_id: string,
   ): Promise<RentalEntity> {
     console.log({
@@ -24,7 +24,7 @@ export class RentalService {
       description,
       price,
       category_id,
-      geoLocation,
+      latitude, longitude,
       user_id,
     });
 
@@ -77,7 +77,7 @@ export class RentalService {
   }
   async updateRentalService(
     id: string,
-    { name, description, price, category_id, geoLocation }: RentalUpdateReq,
+    { name, description, price, category_id, latitude, longitude }: RentalUpdateReq,
   ) {
     try {
       const Rental = await this.prismaService.rentals.update({
@@ -88,6 +88,7 @@ export class RentalService {
           name,
           category_id,
           description,
+          latitude, longitude,
           price,
         },
       });
@@ -129,7 +130,7 @@ export class RentalService {
   async getUserIdByhomeId(id: string) {
     const user = await this.prismaService.rentals.findUnique({
       where: {
-        rental_id : id,
+        rental_id: id,
       },
       select: {
         user: {
@@ -159,4 +160,5 @@ export class RentalService {
     });
     return dbAttributes;
   }
+  async writeImagePathToDB() { }
 }

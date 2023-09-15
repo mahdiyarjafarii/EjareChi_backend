@@ -1,4 +1,4 @@
-import { IsOptional, IsEnum, IsNumber, IsString } from 'class-validator';
+import { IsOptional, IsEnum, IsNumber, IsString, IsArray } from 'class-validator';
 import { CategoriesType } from 'src/infrastructure/global.type';
 
 export class RentalCreateReq {
@@ -17,9 +17,20 @@ export class RentalCreateReq {
   @IsNumber()
   price: number;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  geoLocation?: string;
+  latitude?: number;
+
+  @IsNumber()
+  @IsOptional()
+  longitude?: number
+
+  // @IsString()
+  // user_id: string
+
+  @IsArray()
+  @IsOptional()
+  images: string[]
 }
 
 export class RentalUpdateReq {
@@ -40,21 +51,24 @@ export class RentalUpdateReq {
   @IsOptional()
   price: number;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  geoLocation?: string;
+  latitude?: number;
+
+  @IsNumber()
+  @IsOptional()
+  longitude?: number
 }
 
 export class RentalEntity {
   constructor(partial: Partial<RentalEntity>) {
     Object.assign(this, partial);
   }
-  id: string;
+  rental_id: string;
   name: string;
   description: string;
-  category_id: number;
+  latitude?: number;
+  longitude?: number
   price: number;
-  latitude: number;
-  longitude: number;
-  ownerID: string;
+  user_id: string;
 }

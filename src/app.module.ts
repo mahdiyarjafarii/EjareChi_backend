@@ -19,10 +19,10 @@ import { RentalModule } from './v1/rental/rental.module';
       provide: APP_INTERCEPTOR,
       useClass: UserInterceptor,
     },
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard,
+    // },
   ],
 })
 export class AppModule {}
