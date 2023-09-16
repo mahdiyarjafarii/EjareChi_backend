@@ -1,4 +1,10 @@
-import { IsOptional, IsEnum, IsNumber, IsString, IsArray } from 'class-validator';
+import {
+  IsOptional,
+  IsEnum,
+  IsNumber,
+  IsString,
+  IsArray,
+} from 'class-validator';
 import { CategoriesType } from 'src/infrastructure/global.type';
 
 export class RentalCreateReq {
@@ -23,14 +29,14 @@ export class RentalCreateReq {
 
   @IsNumber()
   @IsOptional()
-  longitude?: number
+  longitude?: number;
 
   // @IsString()
   // user_id: string
 
   @IsArray()
   @IsOptional()
-  images: string[]
+  images: string[];
 }
 
 export class RentalUpdateReq {
@@ -57,7 +63,7 @@ export class RentalUpdateReq {
 
   @IsNumber()
   @IsOptional()
-  longitude?: number
+  longitude?: number;
 }
 
 export class RentalEntity {
@@ -68,7 +74,7 @@ export class RentalEntity {
   name: string;
   description: string;
   latitude?: number;
-  longitude?: number
+  longitude?: number;
   price: number;
   user_id: string;
 }
