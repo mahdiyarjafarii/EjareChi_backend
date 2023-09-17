@@ -1,9 +1,10 @@
 import { Controller, Get, HttpException, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserCreateReq, UserLoginReq } from './dtos/users.dto';
-import { Body } from '@nestjs/common/decorators';
+import { Body, Req } from '@nestjs/common/decorators';
 import * as bcrypt from 'bcrypt';
 import { User, UserType } from '../decorators/user.decorator';
+import { Request } from 'express';
 
 @Controller({
   path: 'auth',
@@ -66,11 +67,9 @@ export class AuthController {
 
 
 
-  @Get('redis')
-  async testRedis( @User() user :UserType ){
-    console.log(user,"test")
-     const result= await this.authServices.getTokenRedis("mahdiyarjfr@gmail.com")
-      return result
+  @Get('test')
+  async testRedis(@Req() request: Request ){
+  console.log(request.cookies)
     // return this.authServices.getData("sss")
   }
 }
