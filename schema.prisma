@@ -8,7 +8,7 @@ datasource db {
 }
 
 model users {
-  user_id           String    @id @default(uuid())
+  user_id      String    @id @default(uuid())
   name         String    @db.VarChar(255)
   lastName     String?   @db.VarChar(255)
   email        String?   @unique @db.VarChar(255)
@@ -16,32 +16,32 @@ model users {
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
   user_type    userType  @default(NOTADMIN)
-  pruducts     rentals[]
+  rentals      rentals[]
 }
 
 model rentals {
-  rental_id   String   @id @default(uuid())
-  name        String   @db.VarChar(255)
+  rental_id   String         @id @default(uuid())
+  name        String         @db.VarChar(255)
   description String
   category_id Int
   price       Float
-  approved    Boolean  @default(false)
+  approved    Boolean        @default(false)
   user_id     String
-  latitude    Float    @default(35.7219)
-  longitude   Float    @default(51.3347)
-  user        users    @relation(fields: [user_id], references: [user_id])
-  category    Category @relation(fields: [category_id], references: [category_id])
-  images      RentalImages[] 
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  latitude    Float          @default(35.7219)
+  longitude   Float          @default(51.3347)
+  user        users          @relation(fields: [user_id], references: [user_id])
+  category    Category       @relation(fields: [category_id], references: [category_id])
+  images      RentalImages[]
+  created_at  DateTime       @default(now())
+  updated_at  DateTime       @updatedAt
 }
 
 model RentalImages {
-  image_id         String   @id @default(uuid())
-  rental_id        String
+  image_id   String  @id @default(uuid())
+  rental_id  String
   // image_data can be blob or absolute path to image
-  image_data       String
-  rentals          rentals  @relation(fields: [rental_id],references: [rental_id])
+  image_data String
+  rentals    rentals @relation(fields: [rental_id], references: [rental_id])
 }
 
 model Category {

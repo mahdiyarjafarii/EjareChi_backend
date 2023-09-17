@@ -28,7 +28,7 @@ import { User, UserType } from '../decorators/user.decorator';
 import { Roles } from '../decorators/roles.decorator';
 import * as multer from 'multer';
 import { cwd } from 'process';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, renameSync } from 'fs';
 //import { AuthGuard } from './auth.guard';
 
 @Controller({
@@ -36,7 +36,7 @@ import { existsSync, mkdirSync } from 'fs';
   version: '1',
 })
 export class RentalController {
-  constructor(private readonly rentalService: RentalService) { }
+  constructor(private readonly rentalService: RentalService) {}
 
   // @Roles(userType.NOTADMIN, userType.ADMIN)
   @Get()
@@ -73,29 +73,26 @@ export class RentalController {
     return await this.rentalService.getRentalByIDService(id);
   }
 
-
-
-
   //@Roles(userType.NOTADMIN, userType.ADMIN)
   @Post('/create')
   @UseInterceptors(
     FilesInterceptor('images', 7, {
       storage: multer.diskStorage({
         destination: function (req, file, cb) {
-          let destinationPath = `${cwd()}/uploads/${req.headers?.authorization}`
-          
-          if (!existsSync(destinationPath)){
-            mkdirSync(destinationPath)
-        }
-          
-          console.log(1,req.headers,file);
-          
-          cb(null, destinationPath)
+          const destinationPath = `${cwd()}/uploads/tmp`;
+
+          if (!existsSync(destinationPath)) {
+            mkdirSync(destinationPath);
+          }
+
+          console.log(1, req.headers, file);
+
+          cb(null, destinationPath);
         },
         filename: function (req, file, cb) {
-          cb(null, file.originalname)
-        }
-      })
+          cb(null, file.originalname);
+        },
+      }),
     }),
   )
   async createRental(
@@ -105,11 +102,16 @@ export class RentalController {
   ): Promise<RentalEntity> {
     console.log({ images });
     console.log({ productDTO });
-    let testID = "a7afb7d62e61"
-    return await this.rentalService.createRentalService(
+    const testID = 'a7afb7d62e61';
+
+    const dbRes = await this.rentalService.createRentalService(
       productDTO,
       testID,
     );
+
+    renameSync(`${cwd()}/uploads/tmp`, `${cwd()}/uploads/${dbRes.rental_id}`);
+
+    return dbRes;
   }
 
   @Roles(userType.NOTADMIN, userType.ADMIN)
