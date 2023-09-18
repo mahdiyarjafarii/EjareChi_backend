@@ -5,6 +5,14 @@ import { UserCreateReq, UserEntity } from './dtos/users.dto';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { Redis } from 'ioredis';
+import { userType } from '@prisma/client';
+
+interface payloadJWT {
+  userId: string;
+  user_type: userType;
+  iat: number;
+  exp: number;
+}
 
 @Injectable()
 export class AuthService {
@@ -79,6 +87,30 @@ export class AuthService {
       return cachedData;
     } catch (e) {
       console.error(e);
+    }
+  }
+
+  async getUserWithToken(token: string): Promise<UserEntity | undefined> {
+    try {
+      const payload = (await jwt.verify(
+        token,
+        process.env.JWT_SECRET,
+      )) as payloadJWT;
+      if (!payload) {
+        return null;
+      }
+      const user = await this.prismaService.users.findUnique({
+        where: {
+          user_id: payload.userId,
+        },
+      });
+
+      if (!user) return null;
+
+      return user;
+    } catch (error) {
+      console.log(error);
+      return null;
     }
   }
 }
