@@ -67,9 +67,10 @@ export class AuthController {
 
 
 
-  @Get('test')
-  async testRedis(@Req() request: Request ){
-  console.log(request.cookies)
-    // return this.authServices.getData("sss")
+  @Get('currentUser')
+  async currentUser(@Req() request: Request ){
+    const token=request.headers?.authorization?.split("Bearer ")[1];
+    return this.authServices.getUserWithToken(token);
+
   }
 }
