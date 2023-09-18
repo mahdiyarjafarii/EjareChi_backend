@@ -111,6 +111,8 @@ export class RentalController {
       testID,
     );
 
+    await this.rentalService.writeImagePathToDB(images , dbRes.rental_id)
+
     if (images?.length) {
       renameSync(`${cwd()}/uploads/tmp`, `${cwd()}/uploads/${dbRes.rental_id}`);
     }

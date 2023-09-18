@@ -178,5 +178,16 @@ export class RentalService {
     });
     return dbAttributes;
   }
-  //async writeImagePathToDB() {}
+  async writeImagePathToDB(images:Array<Express.Multer.File> , rentalID:string) {
+    //TODO : change prime key of images table for ignoring repetitive inserts
+    let dbRes = await this.prismaService.rentalImages.createMany({
+      data:images.map((image:Express.Multer.File)=>{
+        return{
+          rental_id: rentalID,
+          image_data: image.filename,          
+        }
+      })
+    })
+    return true
+  }
 }
