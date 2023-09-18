@@ -42,11 +42,15 @@ export class RentalController {
   @Get()
   async getAllRental(
     @Query('approved') approvedStatus?: boolean,
+    @Query('category-name') categoryName?: string,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
     console.log(user);
 
-    return await this.rentalService.getAllRentalsService(approvedStatus);
+    return await this.rentalService.getAllRentalsService(
+      approvedStatus,
+      categoryName,
+    );
   }
 
   @Get('/categories')
@@ -60,7 +64,6 @@ export class RentalController {
   async getCategoryAttribute(
     @Query('category-id', ParseIntPipe) categoryID: number,
   ): Promise<any> {
-    console.log();
 
     return await this.rentalService.getCategoryAttributesService(categoryID);
   }
@@ -102,14 +105,16 @@ export class RentalController {
   ): Promise<RentalEntity> {
     console.log({ images });
     console.log({ productDTO });
-    const testID = 'a7afb7d62e61';
+    const testID = '80678f63-3571-4941-8887-a7afb7d62e61';
 
     const dbRes = await this.rentalService.createRentalService(
       productDTO,
       testID,
     );
 
-    renameSync(`${cwd()}/uploads/tmp`, `${cwd()}/uploads/${dbRes.rental_id}`);
+    if (images?.length) {
+      renameSync(`${cwd()}/uploads/tmp`, `${cwd()}/uploads/${dbRes.rental_id}`);
+    }
 
     return dbRes;
   }

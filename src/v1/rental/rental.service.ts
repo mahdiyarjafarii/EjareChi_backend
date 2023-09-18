@@ -50,11 +50,13 @@ export class RentalService {
   }
   async getAllRentalsService(
     approvedStatus?: boolean,
+    categoryName?: string,
   ): Promise<RentalEntity[]> {
     const searchQueryObj = {
       ...(approvedStatus && {
         approved: approvedStatus,
       }),
+      ...(categoryName && { category: { query_name: categoryName } }),
     };
 
     const Rentals = await this.prismaService.rentals.findMany({
