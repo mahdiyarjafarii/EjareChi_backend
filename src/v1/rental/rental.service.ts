@@ -60,8 +60,18 @@ export class RentalService {
     };
 
     const Rentals = await this.prismaService.rentals.findMany({
+      //include is used for doing JOINS
+      include:{
+        images:{
+          select:{
+            image_data:true
+          }
+        }
+      },
       where: searchQueryObj,
     });
+    console.log({Rentals});
+    
 
     if (Rentals?.length) {
       return Rentals.map((Rental) => new RentalEntity(Rental));
