@@ -45,7 +45,7 @@ export class RentalController {
     @Query('category-name') categoryName?: string,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
-    console.log(user);
+    console.log(categoryName);
 
     return await this.rentalService.getAllRentalsService(
       approvedStatus,

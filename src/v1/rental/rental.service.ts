@@ -58,6 +58,7 @@ export class RentalService {
       }),
       ...(categoryName && { category: { query_name: categoryName } }),
     };
+    console.log(searchQueryObj)
 
     const Rentals = await this.prismaService.rentals.findMany({
       //include is used for doing JOINS
