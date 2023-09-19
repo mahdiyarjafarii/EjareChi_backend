@@ -60,7 +60,7 @@ export class RentalController {
     return await this.rentalService.getAllCategoriesService();
   }
 
-  @Get('/categories-attributes')
+  @Get('/category-attributes')
   async getCategoryAttribute(
     @Query('category-id', ParseIntPipe) categoryID: number,
   ): Promise<any> {
