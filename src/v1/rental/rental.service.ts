@@ -51,7 +51,12 @@ export class RentalService {
   async getAllRentalsService(
     approvedStatus?: boolean,
     categoryName?: string,
+    mapLatitude?: number,
+    mapLongitude?: number,
   ): Promise<RentalEntity[]> {
+    const latTolerance = 0.5;
+    const lngTolerance = 0.5;
+
     const searchQueryObj = {
       ...(approvedStatus && {
         approved: approvedStatus,
@@ -59,8 +64,29 @@ export class RentalService {
       ...(categoryName && { category: { query_name: categoryName } }),
     };
 
+    const latQueryObj = {
+      ...(mapLatitude && {
+        latitude: {
+          gte: mapLatitude - latTolerance,
+          lte: mapLatitude + latTolerance,
+        },
+      }),
+    };
+
+    const lngQueryObj = {
+      ...(mapLongitude && {
+        longitude: {
+          gte: mapLongitude - lngTolerance,
+          lte: mapLongitude + lngTolerance,
+        },
+      }),
+    };
+
     const Rentals = await this.prismaService.rentals.findMany({
-      where: searchQueryObj,
+      where: {
+        ...searchQueryObj,
+        AND: [lngQueryObj, latQueryObj],
+      },
     });
 
     if (Rentals?.length) {

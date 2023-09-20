@@ -15,6 +15,7 @@ import {
   UnauthorizedException,
   UseGuards,
   ParseIntPipe,
+  ParseFloatPipe,
 } from '@nestjs/common';
 import { RentalService } from './rental.service';
 import {
@@ -43,20 +44,23 @@ export class RentalController {
   async getAllRental(
     @Query('approved') approvedStatus?: boolean,
     @Query('category-name') categoryName?: string,
+    @Query('lat') mapLatitude?: number,
+    @Query('lng') mapLongitude?: number,
+    @Query('zoom') zoom?: number,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
-    console.log(user);
+    //console.log(user);
 
     return await this.rentalService.getAllRentalsService(
       approvedStatus,
       categoryName,
+      mapLatitude,
+      mapLongitude,
     );
   }
 
   @Get('/categories')
   async getCategories(): Promise<any> {
-    console.log();
-
     return await this.rentalService.getAllCategoriesService();
   }
 
@@ -86,8 +90,6 @@ export class RentalController {
           if (!existsSync(destinationPath)) {
             mkdirSync(destinationPath);
           }
-
-          console.log(1, req.headers, file);
 
           cb(null, destinationPath);
         },
