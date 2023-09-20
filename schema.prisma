@@ -29,6 +29,7 @@ model rentals {
   user_id     String
   latitude    Float          @default(35.7219)
   longitude   Float          @default(51.3347)
+  Strictness_number Int      @default(2) 
   user        users          @relation(fields: [user_id], references: [user_id])
   category    Category       @relation(fields: [category_id], references: [category_id])
   images      RentalImages[]

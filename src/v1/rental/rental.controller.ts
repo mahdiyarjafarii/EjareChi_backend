@@ -64,7 +64,7 @@ export class RentalController {
     return await this.rentalService.getAllCategoriesService();
   }
 
-  @Get('/categories-attributes')
+  @Get('/category-attributes')
   async getCategoryAttribute(
     @Query('category-id', ParseIntPipe) categoryID: number,
   ): Promise<any> {
@@ -112,6 +112,8 @@ export class RentalController {
       productDTO,
       testID,
     );
+
+    await this.rentalService.writeImagePathToDB(images , dbRes.rental_id)
 
     if (images?.length) {
       renameSync(`${cwd()}/uploads/tmp`, `${cwd()}/uploads/${dbRes.rental_id}`);

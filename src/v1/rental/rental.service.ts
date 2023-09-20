@@ -63,6 +63,7 @@ export class RentalService {
       }),
       ...(categoryName && { category: { query_name: categoryName } }),
     };
+    console.log(searchQueryObj);
 
     const latQueryObj = {
       ...(mapLatitude && {
@@ -83,6 +84,14 @@ export class RentalService {
     };
 
     const Rentals = await this.prismaService.rentals.findMany({
+      //include is used for doing JOINS
+      include: {
+        images: {
+          select: {
+            image_data: true,
+          },
+        },
+      },
       where: {
         ...searchQueryObj,
         AND: [lngQueryObj, latQueryObj],
@@ -204,5 +213,19 @@ export class RentalService {
     });
     return dbAttributes;
   }
-  //async writeImagePathToDB() {}
+  async writeImagePathToDB(
+    images: Array<Express.Multer.File>,
+    rentalID: string,
+  ) {
+    //TODO : change prime key of images table for ignoring repetitive inserts
+    const dbRes = await this.prismaService.rentalImages.createMany({
+      data: images.map((image: Express.Multer.File) => {
+        return {
+          rental_id: rentalID,
+          image_data: image.filename,
+        };
+      }),
+    });
+    return true;
+  }
 }

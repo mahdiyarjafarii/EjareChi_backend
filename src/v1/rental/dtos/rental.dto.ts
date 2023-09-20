@@ -77,4 +77,5 @@ export class RentalEntity {
   longitude?: number;
   price: number;
   user_id: string;
+  images: any[];
 }
