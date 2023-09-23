@@ -17,7 +17,6 @@ import { ESSearchModule } from './infrastructure/elasticsearch/elasticsearch.mod
     ConfigModule.forRoot(),
     RentalModule,
     PrismaModule,
-    ESSearchModule,
     AuthModule,
     SearchModule,
   ],

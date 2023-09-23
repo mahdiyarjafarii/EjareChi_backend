@@ -6,7 +6,7 @@ export class SearchService {
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
   async test() {
-    const res = this.elasticsearchService.index({
+    const res = await this.elasticsearchService.index({
       index: 'test',
       body: {
         id: '1',
