@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { SearchController } from './search.controller';
 // import { SearchService } from './search.service';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
@@ -22,4 +22,16 @@ import { SearchService } from './search.service';
     }),
   ],
 })
-export class SearchModule {}
+export class SearchModule implements OnModuleInit{
+  constructor(private readonly searchService: SearchService) {}
+
+  async onModuleInit() {
+    // Execute code when the module is initialized
+    await this.searchService.initiateElasticMapping(); // Run your service or custom logic here
+
+  }
+}
+
+
+
+
