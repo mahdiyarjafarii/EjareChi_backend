@@ -2,8 +2,11 @@ import { Module } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
-    imports: [ElasticsearchModule.register({
+  imports: [
+    ElasticsearchModule.register({
       node: process.env.ELASTICSEARCH_URL,
-    })],
+    }),
+  ],
+  exports: [ESSearchModule],
 })
-export class SearchModule {}
+export class ESSearchModule {}

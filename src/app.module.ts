@@ -9,10 +9,19 @@ import { UserInterceptor } from './v1/interceptors/user.interceptor';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
 import { RentalModule } from './v1/rental/rental.module';
+import { SearchModule } from './v1/search/search.module';
+import { SearchController } from './v1/search/search.controller';
+import { SearchService } from './v1/search/search.service';
 
 @Module({
-  imports: [ConfigModule.forRoot(), RentalModule , PrismaModule, AuthModule],
-  controllers: [AppController],
+  imports: [
+    ConfigModule.forRoot(),
+    RentalModule,
+    PrismaModule,
+    AuthModule,
+    SearchModule,
+  ],
+  controllers: [AppController, SearchController],
   providers: [
     AppService,
     {
@@ -23,6 +32,7 @@ import { RentalModule } from './v1/rental/rental.module';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    SearchService,
   ],
 })
 export class AppModule {}
