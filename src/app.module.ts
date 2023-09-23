@@ -10,18 +10,18 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
 import { RentalModule } from './v1/rental/rental.module';
 import { SearchModule } from './v1/search/search.module';
-import { SearchController } from './v1/search/search.controller';
-import { SearchService } from './v1/search/search.service';
+import { ESSearchModule } from './infrastructure/elasticsearch/elasticsearch.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     RentalModule,
     PrismaModule,
+    ESSearchModule,
     AuthModule,
     SearchModule,
   ],
-  controllers: [AppController, SearchController],
+  controllers: [AppController],
   providers: [
     AppService,
     {
@@ -32,7 +32,6 @@ import { SearchService } from './v1/search/search.service';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-    SearchService,
   ],
 })
 export class AppModule {}

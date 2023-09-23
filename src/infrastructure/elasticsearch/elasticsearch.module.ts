@@ -4,9 +4,13 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
 @Module({
   imports: [
     ElasticsearchModule.register({
-      node: process.env.ELASTICSEARCH_URL,
+      // node: process.env.ELASTICSEARCH_URL,
+      node: 'https://84.46.250.91:9200',
+      auth: {
+        username: 'elastic',
+        password: 'Lr=AUWucMa-DL2kPBA9J',
+      },
     }),
   ],
-  exports: [ESSearchModule],
 })
 export class ESSearchModule {}
