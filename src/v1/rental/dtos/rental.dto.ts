@@ -4,6 +4,8 @@ import {
   IsNumber,
   IsString,
   IsArray,
+  Min,
+  Max 
 } from 'class-validator';
 import { CategoriesType } from 'src/infrastructure/global.type';
 
@@ -37,6 +39,11 @@ export class RentalCreateReq {
   @IsArray()
   @IsOptional()
   images: string[];
+
+  @IsNumber()
+  @Min(0, { message: 'Minimum value is 1' }) // Set the minimum value (0 in this example)
+  @Max(100, { message: 'Maximum value is 6' }) // Set the maximum value (100 in this example)
+  Strictness_number:number
 }
 
 export class RentalUpdateReq {
@@ -64,6 +71,12 @@ export class RentalUpdateReq {
   @IsNumber()
   @IsOptional()
   longitude?: number;
+
+  
+  @IsNumber()
+  @Min(0, { message: 'Minimum value is 1' }) // Set the minimum value (0 in this example)
+  @Max(100, { message: 'Maximum value is 6' }) // Set the maximum value (100 in this example)
+  Strictness_number:number
 }
 
 export class RentalEntity {
@@ -78,4 +91,5 @@ export class RentalEntity {
   price: number;
   user_id: string;
   images: any[];
+  Strictness_number:number;
 }

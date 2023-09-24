@@ -52,7 +52,11 @@ export class RentalController {
     @Query('zoom') zoom?: number,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
+<<<<<<< HEAD
+    // console.log(categoryName);
+=======
     //console.log(user);
+>>>>>>> bef4299619cdff70d5663aac7ad42372429bcebf
 
     return await this.rentalService.getAllRentalsService(
       approvedStatus,
@@ -108,7 +112,8 @@ export class RentalController {
     @User() user?: UserType,
   ): Promise<RentalEntity> {
     console.log({ images });
-    console.log({ productDTO });
+    // console.log({ productDTO });
+    // console.log(user)
     const testID = '80678f63-3571-4941-8887-a7afb7d62e61';
 
     const dbRes = await this.rentalService.createRentalService(
