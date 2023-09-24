@@ -30,6 +30,7 @@ import { Roles } from '../decorators/roles.decorator';
 import * as multer from 'multer';
 import { cwd } from 'process';
 import { existsSync, mkdirSync, renameSync } from 'fs';
+import { SearchService } from '../search/search.service';
 //import { AuthGuard } from './auth.guard';
 
 @Controller({
@@ -37,7 +38,9 @@ import { existsSync, mkdirSync, renameSync } from 'fs';
   version: '1',
 })
 export class RentalController {
-  constructor(private readonly rentalService: RentalService) {}
+  constructor(private readonly rentalService: RentalService,
+    private readonly searchService: SearchService
+  ) { }
 
   // @Roles(userType.NOTADMIN, userType.ADMIN)
   @Get()
@@ -112,6 +115,8 @@ export class RentalController {
       productDTO,
       testID,
     );
+
+    await this.searchService.
 
     await this.rentalService.writeImagePathToDB(images, dbRes.rental_id);
 
