@@ -54,28 +54,52 @@ export class RentalService {
   async getAllRentalsService(
     approvedStatus?: boolean,
     categoryName?: string,
+    mapLatitude?: number,
+    mapLongitude?: number,
   ): Promise<RentalEntity[]> {
+    const latTolerance = 0.5;
+    const lngTolerance = 0.5;
+
     const searchQueryObj = {
       ...(approvedStatus && {
         approved: approvedStatus,
       }),
       ...(categoryName && { category: { query_name: categoryName } }),
     };
-    console.log(searchQueryObj)
+    console.log(searchQueryObj);
+
+    const latQueryObj = {
+      ...(mapLatitude && {
+        latitude: {
+          gte: mapLatitude - latTolerance,
+          lte: mapLatitude + latTolerance,
+        },
+      }),
+    };
+
+    const lngQueryObj = {
+      ...(mapLongitude && {
+        longitude: {
+          gte: mapLongitude - lngTolerance,
+          lte: mapLongitude + lngTolerance,
+        },
+      }),
+    };
 
     const Rentals = await this.prismaService.rentals.findMany({
       //include is used for doing JOINS
-      include:{
-        images:{
-          select:{
-            image_data:true
-          }
-        }
+      include: {
+        images: {
+          select: {
+            image_data: true,
+          },
+        },
       },
-      where: searchQueryObj,
+      where: {
+        ...searchQueryObj,
+        AND: [lngQueryObj, latQueryObj],
+      },
     });
-    console.log({Rentals});
-    
 
     if (Rentals?.length) {
       return Rentals.map((Rental) => new RentalEntity(Rental));
@@ -192,16 +216,19 @@ export class RentalService {
     });
     return dbAttributes;
   }
-  async writeImagePathToDB(images:Array<Express.Multer.File> , rentalID:string) {
+  async writeImagePathToDB(
+    images: Array<Express.Multer.File>,
+    rentalID: string,
+  ) {
     //TODO : change prime key of images table for ignoring repetitive inserts
-    let dbRes = await this.prismaService.rentalImages.createMany({
-      data:images.map((image:Express.Multer.File)=>{
-        return{
+    const dbRes = await this.prismaService.rentalImages.createMany({
+      data: images.map((image: Express.Multer.File) => {
+        return {
           rental_id: rentalID,
-          image_data: image.filename,          
-        }
-      })
-    })
-    return true
+          image_data: image.filename,
+        };
+      }),
+    });
+    return true;
   }
 }

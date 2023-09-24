@@ -15,6 +15,7 @@ import {
   UnauthorizedException,
   UseGuards,
   ParseIntPipe,
+  ParseFloatPipe,
 } from '@nestjs/common';
 import { RentalService } from './rental.service';
 import {
@@ -43,20 +44,27 @@ export class RentalController {
   async getAllRental(
     @Query('approved') approvedStatus?: boolean,
     @Query('category-name') categoryName?: string,
+    @Query('lat') mapLatitude?: number,
+    @Query('lng') mapLongitude?: number,
+    @Query('zoom') zoom?: number,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
+<<<<<<< HEAD
     // console.log(categoryName);
+=======
+    //console.log(user);
+>>>>>>> bef4299619cdff70d5663aac7ad42372429bcebf
 
     return await this.rentalService.getAllRentalsService(
       approvedStatus,
       categoryName,
+      mapLatitude,
+      mapLongitude,
     );
   }
 
   @Get('/categories')
   async getCategories(): Promise<any> {
-    console.log();
-
     return await this.rentalService.getAllCategoriesService();
   }
 
@@ -87,8 +95,6 @@ export class RentalController {
             mkdirSync(destinationPath);
           }
 
-          console.log(1, req.headers, file);
-
           cb(null, destinationPath);
         },
         filename: function (req, file, cb) {
@@ -112,7 +118,7 @@ export class RentalController {
       testID,
     );
 
-    await this.rentalService.writeImagePathToDB(images , dbRes.rental_id)
+    await this.rentalService.writeImagePathToDB(images, dbRes.rental_id);
 
     if (images?.length) {
       renameSync(`${cwd()}/uploads/tmp`, `${cwd()}/uploads/${dbRes.rental_id}`);

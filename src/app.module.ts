@@ -9,9 +9,17 @@ import { UserInterceptor } from './v1/interceptors/user.interceptor';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
 import { RentalModule } from './v1/rental/rental.module';
+import { SearchModule } from './v1/search/search.module';
+import { ESSearchModule } from './infrastructure/elasticsearch/elasticsearch.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), RentalModule , PrismaModule, AuthModule],
+  imports: [
+    ConfigModule.forRoot(),
+    RentalModule,
+    PrismaModule,
+    AuthModule,
+    SearchModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
