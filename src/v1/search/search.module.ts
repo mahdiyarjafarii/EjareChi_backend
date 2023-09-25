@@ -21,6 +21,7 @@ import { SearchService } from './search.service';
       },
     }),
   ],
+  exports:[SearchService]
 })
 export class SearchModule implements OnModuleInit{
   constructor(private readonly searchService: SearchService) {}

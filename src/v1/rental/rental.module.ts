@@ -3,6 +3,7 @@ import { RentalController } from './rental.controller';
 import { RentalService } from './rental.service';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from 'src/infrastructure/prisma/prisma.module';
+import { SearchModule } from '../search/search.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PrismaModule } from 'src/infrastructure/prisma/prisma.module';
       // }),
     }),
     // CustomLoggerModule,
+    SearchModule
   ],
   controllers: [RentalController],
   providers: [RentalService],

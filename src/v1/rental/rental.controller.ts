@@ -30,6 +30,7 @@ import { Roles } from '../decorators/roles.decorator';
 import * as multer from 'multer';
 import { cwd } from 'process';
 import { existsSync, mkdirSync, renameSync } from 'fs';
+import { SearchService } from '../search/search.service';
 //import { AuthGuard } from './auth.guard';
 
 @Controller({
@@ -37,7 +38,9 @@ import { existsSync, mkdirSync, renameSync } from 'fs';
   version: '1',
 })
 export class RentalController {
-  constructor(private readonly rentalService: RentalService) {}
+  constructor(private readonly rentalService: RentalService,
+    private readonly searchService: SearchService
+  ) { }
 
   // @Roles(userType.NOTADMIN, userType.ADMIN)
   @Get()
@@ -49,7 +52,11 @@ export class RentalController {
     @Query('zoom') zoom?: number,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
+<<<<<<< HEAD
+    // console.log(categoryName);
+=======
     //console.log(user);
+>>>>>>> bef4299619cdff70d5663aac7ad42372429bcebf
 
     return await this.rentalService.getAllRentalsService(
       approvedStatus,
@@ -105,13 +112,16 @@ export class RentalController {
     @User() user?: UserType,
   ): Promise<RentalEntity> {
     console.log({ images });
-    console.log({ productDTO });
+    // console.log({ productDTO });
+    // console.log(user)
     const testID = '80678f63-3571-4941-8887-a7afb7d62e61';
 
     const dbRes = await this.rentalService.createRentalService(
       productDTO,
       testID,
     );
+
+    await this.searchService.
 
     await this.rentalService.writeImagePathToDB(images, dbRes.rental_id);
 

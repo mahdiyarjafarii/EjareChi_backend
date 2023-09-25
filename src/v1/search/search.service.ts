@@ -77,4 +77,6 @@ export class SearchService {
     console.log({ res: res?.body?.hits?.hits });
     return res?.body?.hits;
   }
+
+  async createSearchDocument(){}
 }
