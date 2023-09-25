@@ -78,5 +78,18 @@ export class SearchService {
     return res?.body?.hits;
   }
 
-  async createSearchDocument(){}
+  async createSearchDocument(document: {
+    id: string;
+    body: {
+      name: string;
+      description: string;
+      category: string;
+      username: string;
+    };
+  }) {
+    const res = await this.elasticsearchService.index({
+      index: this.RENTALS_INDEX,
+      ...document,
+    });
+  }
 }
