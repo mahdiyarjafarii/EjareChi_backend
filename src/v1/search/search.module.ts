@@ -21,18 +21,13 @@ import { SearchService } from './search.service';
       },
     }),
   ],
-  exports:[SearchService]
+  exports: [SearchService],
 })
-export class SearchModule implements OnModuleInit{
+export class SearchModule implements OnModuleInit {
   constructor(private readonly searchService: SearchService) {}
 
   async onModuleInit() {
     // Execute code when the module is initialized
     await this.searchService.initiateElasticMapping(); // Run your service or custom logic here
-
   }
 }
-
-
-
-

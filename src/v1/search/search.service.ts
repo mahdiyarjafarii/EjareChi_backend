@@ -83,7 +83,7 @@ export class SearchService {
     body: {
       name: string;
       description: string;
-      category: string;
+      category: number;
       username: string;
     };
   }) {
