@@ -5,7 +5,7 @@ import {
   IsString,
   IsArray,
   Min,
-  Max 
+  Max,
 } from 'class-validator';
 import { CategoriesType } from 'src/infrastructure/global.type';
 
@@ -40,10 +40,11 @@ export class RentalCreateReq {
   @IsOptional()
   images: string[];
 
+  @IsOptional()
   @IsNumber()
   @Min(0, { message: 'Minimum value is 1' }) // Set the minimum value (0 in this example)
   @Max(100, { message: 'Maximum value is 6' }) // Set the maximum value (100 in this example)
-  Strictness_number:number
+  Strictness_number?: number;
 }
 
 export class RentalUpdateReq {
@@ -72,11 +73,10 @@ export class RentalUpdateReq {
   @IsOptional()
   longitude?: number;
 
-  
   @IsNumber()
   @Min(0, { message: 'Minimum value is 1' }) // Set the minimum value (0 in this example)
   @Max(100, { message: 'Maximum value is 6' }) // Set the maximum value (100 in this example)
-  Strictness_number:number
+  Strictness_number: number;
 }
 
 export class RentalEntity {
@@ -97,5 +97,6 @@ export class RentalEntity {
     lastName: string;
     email :string;
   };
+  category?: any;
 }
 

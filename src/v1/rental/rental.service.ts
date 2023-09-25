@@ -23,8 +23,7 @@ export class RentalService {
       category_id,
       latitude,
       longitude,
-      Strictness_number
-
+      Strictness_number,
     }: RentalCreateReq,
     user_id: string,
   ): Promise<RentalEntity> {
@@ -46,6 +45,10 @@ export class RentalService {
         Strictness_number,
         user: { connect: { user_id } },
         category: { connect: { category_id } },
+      },
+      include: {
+        user: true,
+        category: true,
       },
     });
 

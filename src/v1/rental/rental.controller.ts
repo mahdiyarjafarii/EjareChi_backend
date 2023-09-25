@@ -117,8 +117,17 @@ export class RentalController {
       productDTO,
       testID,
     );
+    //console.log({dbRes});
 
-    //await this.searchService.
+    await this.searchService.createSearchDocument({
+      id: dbRes.rental_id,
+      body: {
+        name: dbRes.name,
+        description: dbRes.description,
+        category: dbRes?.category?.name,
+        username: dbRes?.user?.name,
+      },
+    });
 
     await this.rentalService.writeImagePathToDB(images, dbRes.rental_id);
 
