@@ -38,9 +38,10 @@ import { SearchService } from '../search/search.service';
   version: '1',
 })
 export class RentalController {
-  constructor(private readonly rentalService: RentalService,
-    private readonly searchService: SearchService
-  ) { }
+  constructor(
+    private readonly rentalService: RentalService,
+    private readonly searchService: SearchService,
+  ) {}
 
   // @Roles(userType.NOTADMIN, userType.ADMIN)
   @Get()
@@ -52,11 +53,7 @@ export class RentalController {
     @Query('zoom') zoom?: number,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
-<<<<<<< HEAD
-    // console.log(categoryName);
-=======
     //console.log(user);
->>>>>>> bef4299619cdff70d5663aac7ad42372429bcebf
 
     return await this.rentalService.getAllRentalsService(
       approvedStatus,
@@ -121,7 +118,7 @@ export class RentalController {
       testID,
     );
 
-    await this.searchService.
+    //await this.searchService.
 
     await this.rentalService.writeImagePathToDB(images, dbRes.rental_id);
 
