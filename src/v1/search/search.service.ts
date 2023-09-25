@@ -3,16 +3,13 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Injectable()
 export class SearchService {
-
   private readonly RENTALS_INDEX: string;
 
-  constructor(
-    private readonly elasticsearchService: ElasticsearchService) {
-    this.RENTALS_INDEX = "rentals"
+  constructor(private readonly elasticsearchService: ElasticsearchService) {
+    this.RENTALS_INDEX = 'rentals';
   }
 
   async initiateElasticMapping() {
-
     // await this.elasticsearchService.indices.delete({
     //   index:this.RENTALS_INDEX
     // })
@@ -20,7 +17,6 @@ export class SearchService {
     const indexExists = await this.elasticsearchService.indices.exists({
       index: this.RENTALS_INDEX,
     });
-
 
     if (!indexExists) {
       await this.elasticsearchService.indices.create({
@@ -42,7 +38,7 @@ export class SearchService {
 
     const res = await this.elasticsearchService.index({
       index: this.RENTALS_INDEX,
-      id: "hhh", // Add an "id" field
+      id: 'hhh', // Add an "id" field
       // body: {
       //   name: "دوچرخه",
       //   description: "بسیار تمیز و خوب",
@@ -50,35 +46,35 @@ export class SearchService {
       //   username: "معین",
       // },
       body: {
-        name: "aaa",
-        description: "bbb",
-        category: "ccc",
-        username: "ddd",
+        name: 'aaa',
+        description: 'bbb',
+        category: 'ccc',
+        username: 'ddd',
       },
     });
     console.log({ res });
   }
 
-  async searchDocumentService(query:string){
-    let res = await this.elasticsearchService.search({
-      index:this.RENTALS_INDEX,
-      body:{
+  async searchDocumentService(query: string) {
+    const res = await this.elasticsearchService.search({
+      index: this.RENTALS_INDEX,
+      body: {
         size: 50,
-        query:{
+        query: {
           bool: {
             should: [
               {
                 multi_match: {
                   query: query, // Your search query
-                  fields: ["name", "description", "category", "username"] // List of fields to search in
-                }
-              }
-            ]
-          }
-        }
+                  fields: ['name', 'description', 'category', 'username'], // List of fields to search in
+                },
+              },
+            ],
+          },
+        },
       },
-    })
-    console.log({res : res?.body?.hits?.hits});
-    return res?.body?.hits
+    });
+    console.log({ res: res?.body?.hits?.hits });
+    return res?.body?.hits;
   }
 }
