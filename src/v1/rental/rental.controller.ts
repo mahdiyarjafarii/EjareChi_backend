@@ -75,7 +75,7 @@ export class RentalController {
     return await this.rentalService.getCategoryAttributesService(categoryID);
   }
 
-  @Roles(userType.NOTADMIN, userType.ADMIN)
+  // @Roles(userType.NOTADMIN, userType.ADMIN)
   @Get(':id')
   async getProductByID(
     @Param('id', ParseUUIDPipe) id: string,

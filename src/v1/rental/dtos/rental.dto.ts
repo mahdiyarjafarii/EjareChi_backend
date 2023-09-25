@@ -92,4 +92,10 @@ export class RentalEntity {
   user_id: string;
   images: any[];
   Strictness_number:number;
+  user?: {
+    name : string;
+    lastName: string;
+    email :string;
+  };
 }
+

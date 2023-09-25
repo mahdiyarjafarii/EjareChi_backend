@@ -112,10 +112,24 @@ export class RentalService {
       where: {
         rental_id: id,
       },
+      include:{
+        user:true
+      }
     });
 
     if (Rental) {
-      return new RentalEntity(Rental);
+      const rentalEntity = new RentalEntity(Rental);
+
+      if (Rental.user) {
+        rentalEntity.user = {
+          name: Rental.user.name,
+          lastName: Rental.user.lastName,
+          email: Rental.user.email,
+        };
+      }
+  
+      return rentalEntity;
+      
     } else {
       throw new HttpException(
         `Prodcut with id#${id} Not Found`,
