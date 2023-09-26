@@ -11,6 +11,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RentalModule } from './v1/rental/rental.module';
 import { SearchModule } from './v1/search/search.module';
 import { ESSearchModule } from './infrastructure/elasticsearch/elasticsearch.module';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
@@ -19,6 +20,16 @@ import { ESSearchModule } from './infrastructure/elasticsearch/elasticsearch.mod
     PrismaModule,
     AuthModule,
     SearchModule,
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            singleLine: true,
+          },
+        },
+      },
+    })
   ],
   controllers: [AppController],
   providers: [

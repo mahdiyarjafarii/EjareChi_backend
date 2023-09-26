@@ -3,9 +3,11 @@ import { AppModule } from './app.module';
 import { VersioningType, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { PrismaService } from './infrastructure/prisma/prisma.service';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule,{ cors: true });
+  const app = await NestFactory.create(AppModule,{ cors: true, bufferLogs: true  });
+  app.useLogger(app.get(Logger));
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
