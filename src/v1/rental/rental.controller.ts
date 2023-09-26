@@ -31,6 +31,7 @@ import * as multer from 'multer';
 import { cwd } from 'process';
 import { existsSync, mkdirSync, renameSync } from 'fs';
 import { SearchService } from '../search/search.service';
+import sharp from 'sharp';
 //import { AuthGuard } from './auth.guard';
 
 @Controller({
@@ -129,9 +130,18 @@ export class RentalController {
       },
     });
 
-    await this.rentalService.writeImagePathToDB(images, dbRes.rental_id);
-
+    
     if (images?.length) {
+      for (const image of images) {
+        const outputPath = `${cwd()}/uploads/tmp/${image.filename}`;
+  
+        await sharp(image.path)
+         
+           .webp({ quality: 80 }) 
+          .toFile(outputPath);
+      }
+      
+      await this.rentalService.writeImagePathToDB(images, dbRes.rental_id);
       renameSync(`${cwd()}/uploads/tmp`, `${cwd()}/uploads/${dbRes.rental_id}`);
     }
 
