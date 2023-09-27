@@ -18,6 +18,7 @@ model users {
   updated_at   DateTime  @updatedAt
   user_type    userType  @default(NOTADMIN)
   rentals      rentals[]
+  reservations Reservations[]
 }
 
 model rentals {
@@ -36,6 +37,7 @@ model rentals {
   images      RentalImages[]
   created_at  DateTime       @default(now())
   updated_at  DateTime       @updatedAt
+   reservations Reservations[]
 }
 
 model RentalImages {
@@ -69,6 +71,22 @@ model CategoryAttribute {
   category   Category @relation(fields: [categoryId], references: [category_id])
   categoryId Int
   // Add other relevant fields, such as validation rules or descriptions
+}
+
+
+model Reservations{
+reservations_id   Int  @id @default(autoincrement())
+startDate          DateTime 
+endDate            DateTime
+created_at         DateTime            @default(now())
+updated_at         DateTime            @updatedAt
+totalPrice         Float
+approve            Boolean              @default(false)
+user_id            String
+rental_id          String
+user             users    @relation(fields: [user_id], references: [user_id])
+rental           rentals  @relation(fields: [rental_id], references: [rental_id])
+
 }
 
 // TODO : 

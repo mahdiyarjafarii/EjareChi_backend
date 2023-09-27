@@ -12,6 +12,7 @@ import { RentalModule } from './v1/rental/rental.module';
 import { SearchModule } from './v1/search/search.module';
 import { ESSearchModule } from './infrastructure/elasticsearch/elasticsearch.module';
 import { LoggerModule } from 'nestjs-pino';
+import { ReservationModule } from './v1/reservation/reservation.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { LoggerModule } from 'nestjs-pino';
     RentalModule,
     PrismaModule,
     AuthModule,
+    ReservationModule,
     SearchModule,
     LoggerModule.forRoot({
       pinoHttp: {
