@@ -1,5 +1,10 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
+import { ReservationsEntity, creatReservations } from './dto/reservatins.dto';
+import { userType } from '@prisma/client';
+import { User } from '../decorators/user.decorator';
+import { log } from 'console';
+
 
 
 @Controller({
@@ -10,7 +15,18 @@ export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
   @Get()
-  getHello(): string {
-    return "return";
+  async getAllReservations(
+
+  ) {
+    this.reservationService.getAllReservations()
+  }
+
+
+  @Post('/create')
+  async creatReservations(
+    @User() user:any,
+    @Body() reservationsDTO:creatReservations
+  ){
+    return this.reservationService.createReservationService(reservationsDTO,user?.userId)
   }
 }

@@ -22,16 +22,16 @@ import { ReservationModule } from './v1/reservation/reservation.module';
     AuthModule,
     ReservationModule,
     SearchModule,
-    LoggerModule.forRoot({
-      pinoHttp: {
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            singleLine: true,
-          },
-        },
-      },
-    })
+    // LoggerModule.forRoot({
+    //   pinoHttp: {
+    //     transport: {
+    //       target: 'pino-pretty',
+    //       options: {
+    //         singleLine: true,
+    //       },
+    //     },
+    //   },
+    // })
   ],
   controllers: [AppController],
   providers: [
