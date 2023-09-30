@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post,Query } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { ReservationsEntity, creatReservations } from './dto/reservatins.dto';
 import { userType } from '@prisma/client';
@@ -16,9 +16,16 @@ export class ReservationController {
 
   @Get()
   async getAllReservations(
+    @Query('user_id') userId?:string, 
+    @Query('rental_id') rentalId?:string,
+    @Query('approved') approvedStatus?: boolean,
 
   ) {
-    this.reservationService.getAllReservations()
+   return this.reservationService.getAllReservations(
+      userId,
+      rentalId,
+      approvedStatus
+    )
   }
 
 
