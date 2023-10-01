@@ -130,17 +130,13 @@ export class RentalController {
       },
     });
 
-    
     if (images?.length) {
       for (const image of images) {
         const outputPath = `${cwd()}/uploads/tmp/${image.filename}`;
-  
-        await sharp(image.path)
-         
-           .webp({ quality: 80 }) 
-          .toFile(outputPath);
+
+        await sharp(image.path).webp({ quality: 80 }).toFile(outputPath);
       }
-      
+
       await this.rentalService.writeImagePathToDB(images, dbRes.rental_id);
       renameSync(`${cwd()}/uploads/tmp`, `${cwd()}/uploads/${dbRes.rental_id}`);
     }

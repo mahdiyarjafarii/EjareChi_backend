@@ -97,6 +97,11 @@ export class RentalService {
             image_data: true,
           },
         },
+        category: {
+          select: {
+            icon_name: true,
+          },
+        },
       },
       where: {
         ...searchQueryObj,
@@ -115,9 +120,9 @@ export class RentalService {
       where: {
         rental_id: id,
       },
-      include:{
-        user:true
-      }
+      include: {
+        user: true,
+      },
     });
 
     if (Rental) {
@@ -130,9 +135,8 @@ export class RentalService {
           email: Rental.user.email,
         };
       }
-  
+
       return rentalEntity;
-      
     } else {
       throw new HttpException(
         `Prodcut with id#${id} Not Found`,
