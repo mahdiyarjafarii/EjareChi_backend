@@ -91,12 +91,11 @@ export class RentalEntity {
   price: number;
   user_id: string;
   images: any[];
-  Strictness_number:number;
+  Strictness_number: number;
   user?: {
-    name : string;
+    name: string;
     lastName: string;
-    email :string;
+    email: string;
   };
   category?: any;
 }
-
