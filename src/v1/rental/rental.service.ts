@@ -43,6 +43,8 @@ export class RentalService {
         price,
         description,
         Strictness_number,
+        latitude,
+        longitude,
         user: { connect: { user_id } },
         category: { connect: { category_id } },
       },
@@ -59,9 +61,14 @@ export class RentalService {
     categoryName?: string,
     mapLatitude?: number,
     mapLongitude?: number,
+    zoom?: number,
   ): Promise<RentalEntity[]> {
-    const latTolerance = 0.5;
-    const lngTolerance = 0.5;
+    console.log({zoom});
+    
+    const lngTolerance = 180 / Math.pow(2, 2 * (zoom - 10));
+    console.log({lngTolerance});
+    
+    const latTolerance = lngTolerance / 2;
 
     const searchQueryObj = {
       ...(approvedStatus && {
@@ -69,7 +76,6 @@ export class RentalService {
       }),
       ...(categoryName && { category: { query_name: categoryName } }),
     };
-    console.log(searchQueryObj);
 
     const latQueryObj = {
       ...(mapLatitude && {
@@ -108,7 +114,8 @@ export class RentalService {
         AND: [lngQueryObj, latQueryObj],
       },
     });
-
+    console.log(Rentals?.length);
+    
     if (Rentals?.length) {
       return Rentals.map((Rental) => new RentalEntity(Rental));
     } else {
