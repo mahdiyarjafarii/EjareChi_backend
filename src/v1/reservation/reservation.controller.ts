@@ -1,8 +1,7 @@
-import { Body, Controller, Get, Post,Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post,Query } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { ReservationsEntity, creatReservations } from './dto/reservatins.dto';
-import { userType } from '@prisma/client';
-import { User } from '../decorators/user.decorator';
+import { User, UserType } from '../decorators/user.decorator';
 import { log } from 'console';
 
 
@@ -34,6 +33,14 @@ export class ReservationController {
     @User() user:any,
     @Body() reservationsDTO:creatReservations
   ){
+    console.log("sss")
     return this.reservationService.createReservationService(reservationsDTO,user?.userId)
+  }
+  @Delete(':id')
+  async deleteReservation(
+    @Param('id') id: number,
+    @User() user?: UserType,
+  ){
+    return  await this.reservationService.deleteReservations(id,user)
   }
 }

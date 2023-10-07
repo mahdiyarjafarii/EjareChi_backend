@@ -1,6 +1,8 @@
 import { Injectable, HttpException, HttpStatus, } from '@nestjs/common';
 import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
 import { ReservationsEntity, creatReservations } from './dto/reservatins.dto';
+import { UserType } from '../decorators/user.decorator';
+
 
 @Injectable()
 export class ReservationService {
@@ -19,16 +21,23 @@ async getAllReservations(
         ...(userId && { user_id:userId}),
         ...(rentalId && { rental_id:rentalId})
       };
-    const reservations=await this.prismaService.reservations.findMany({
-        where:{
+      const reservations = await this.prismaService.reservations.findMany({
+        where: {
             ...searchQueryObj
+        },
+        include: {
+            rental: {
+                include: {
+                    images: true
+                }
+            }
         }
-    }) 
-
+    });
+    
     if (reservations?.length) {
         return reservations.map((reservation) => new ReservationsEntity(reservation));
      }else{
-        throw new HttpException('Prodcuts Not Found', HttpStatus.NOT_FOUND);
+       return [];
      }
 }
 
@@ -52,6 +61,31 @@ async  createReservationService({
  return new ReservationsEntity(createdReservations)
 }
 
+async deleteReservations(id:number,user:UserType){
+    try{
+       
+        const reservations= await this.prismaService.reservations.findFirst({
+             where:{reservations_id:id}
+         }
+         )
+         if(reservations?.user_id !== user?.userId){
+           return "not matchinh"
+         }
+    }catch(error){
+        console.log(error)
+    }
 
+    try{
+       await this.prismaService.reservations.delete({
+            where:{
+                reservations_id:id
+            }
+        })
+        return `Reservations with id = ${id} deleted successfully`;
+    }catch(error){
+        console.log(error)
+    }
+    
+}
 
 }
