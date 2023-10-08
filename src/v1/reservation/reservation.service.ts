@@ -12,6 +12,7 @@ constructor(private readonly prismaService: PrismaService) {}
 async getAllReservations(
     userId :string,
     rentalId:string,
+    authorId:string,
     approvedStatus:boolean
 ): Promise<ReservationsEntity[]>{
     const searchQueryObj = {
@@ -19,7 +20,9 @@ async getAllReservations(
             approve: approvedStatus,
         }),
         ...(userId && { user_id:userId}),
-        ...(rentalId && { rental_id:rentalId})
+        ...(rentalId && { rental_id:rentalId}),
+        ...(authorId && { author_id:authorId}),
+
       };
       const reservations = await this.prismaService.reservations.findMany({
         where: {
@@ -48,13 +51,21 @@ async  createReservationService({
     totalPrice,
     rental_id
 }:creatReservations,user_id:string):Promise<ReservationsEntity>{
+//finde author_id
+const rental=await this.prismaService.rentals.findFirst({
+    where:{
+        rental_id:rental_id
+    }
+})
  const createdReservations= await this.prismaService.reservations.create({
     data:{
         startDate,
         endDate,
         totalPrice,
         user_id,
-        rental_id
+        rental_id,
+        author_id:rental.user_id
+        
     }
  })    
  
@@ -62,18 +73,19 @@ async  createReservationService({
 }
 
 async deleteReservations(id:number,user:UserType){
-    try{
+    // try{
        
-        const reservations= await this.prismaService.reservations.findFirst({
-             where:{reservations_id:id}
-         }
-         )
-         if(reservations?.user_id !== user?.userId){
-           return "not matchinh"
-         }
-    }catch(error){
-        console.log(error)
-    }
+    //     const reservations= await this.prismaService.reservations.findFirst({
+    //          where:{reservations_id:id}
+    //      }
+    //      )
+    //     //  if(reservations?.user_id !== user?.userId || reservations.author_id!==user?.userId){
+    //     //     console.log("test")
+    //     //    return "not matchinh"
+    //     //  }
+    // }catch(error){
+    //     console.log(error)
+    // }
 
     try{
        await this.prismaService.reservations.delete({

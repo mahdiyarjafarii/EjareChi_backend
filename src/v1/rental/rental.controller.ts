@@ -113,11 +113,11 @@ export class RentalController {
     console.log({ images });
     // console.log({ productDTO });
     // console.log(user)
-    const testID = '80678f63-3571-4941-8887-a7afb7d62e61';
+    // const testID = '80678f63-3571-4941-8887-a7afb7d62e61';
 
     const dbRes = await this.rentalService.createRentalService(
       productDTO,
-      testID,
+      user.userId,
     );
     //console.log({dbRes});
 

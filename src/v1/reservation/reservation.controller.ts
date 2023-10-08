@@ -18,12 +18,16 @@ export class ReservationController {
     @Query('user_id') userId?:string, 
     @Query('rental_id') rentalId?:string,
     @Query('approved') approvedStatus?: boolean,
+    @Query('author_id') authorId?: string,
+
+    
 
   ) {
    return this.reservationService.getAllReservations(
       userId,
       rentalId,
-      approvedStatus
+      authorId,
+      approvedStatus,
     )
   }
 
@@ -33,7 +37,6 @@ export class ReservationController {
     @User() user:any,
     @Body() reservationsDTO:creatReservations
   ){
-    console.log("sss")
     return this.reservationService.createReservationService(reservationsDTO,user?.userId)
   }
   @Delete(':id')

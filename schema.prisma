@@ -84,6 +84,7 @@ totalPrice         Float
 approve            Boolean              @default(false)
 user_id            String
 rental_id          String
+author_id          String               @default("dsdfdf848rhf")
 user             users    @relation(fields: [user_id], references: [user_id])
 rental           rentals  @relation(fields: [rental_id], references: [rental_id])
 
