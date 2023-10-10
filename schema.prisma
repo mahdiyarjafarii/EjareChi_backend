@@ -17,6 +17,7 @@ model users {
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
   user_type    userType  @default(NOTADMIN)
+  favoriteIds     String[]
   rentals      rentals[]
   reservations Reservations[]
 }
