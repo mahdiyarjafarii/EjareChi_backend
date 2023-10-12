@@ -48,7 +48,7 @@ export class RentalController {
   @Get()
   async getAllRental(
     @Query('approved') approvedStatus?: boolean,
-    @Query('category-name') categoryName?: string,
+    @Query('category') categoryName?: string,
     @Query('lat') mapLatitude?: number,
     @Query('lng') mapLongitude?: number,
     @Query('zoom') zoom?: number,
