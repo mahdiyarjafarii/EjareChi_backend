@@ -11,6 +11,26 @@ export class UserService {
         }
     })
   }
+  async getUserFavService(userId:string) {
+    const user= await this.prismaService.users.findUnique({
+        where:{
+            user_id:userId
+        }
+    });
+
+    const favoritesListing=await this.prismaService.rentals.findMany({
+      where:{
+        rental_id:{
+          in:[...(user.favoriteIds ||[])]
+        }
+      },
+      include: {
+        images: true 
+    }
+    })
+
+    return favoritesListing
+  }
   async updateFavService(
     userId:string,
     rentalId:string

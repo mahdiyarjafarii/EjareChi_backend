@@ -62,6 +62,7 @@ export class RentalService {
     mapLatitude?: number,
     mapLongitude?: number,
     zoom?: number,
+    userId?:string
   ): Promise<RentalEntity[]> {
     console.log({zoom});
     
@@ -75,6 +76,9 @@ export class RentalService {
         approved: approvedStatus,
       }),
       ...(categoryName && { category: { query_name: categoryName } }),
+      ...(userId && {
+        user_id:userId
+      })
     };
 
     const latQueryObj = {

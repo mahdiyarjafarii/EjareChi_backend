@@ -52,9 +52,11 @@ export class RentalController {
     @Query('lat') mapLatitude?: number,
     @Query('lng') mapLongitude?: number,
     @Query('zoom') zoom?: number,
+    @Query('userId') userId?: string,
+
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
-    //console.log(user);
+    console.log("ttt");
 
     return await this.rentalService.getAllRentalsService(
       approvedStatus,
@@ -62,6 +64,7 @@ export class RentalController {
       mapLatitude,
       mapLongitude,
       zoom,
+      userId
     );
   }
 
