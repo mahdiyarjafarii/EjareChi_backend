@@ -56,7 +56,7 @@ export class RentalController {
 
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
-    console.log("ttt");
+
 
     return await this.rentalService.getAllRentalsService(
       approvedStatus,
@@ -176,7 +176,7 @@ export class RentalController {
     return await this.rentalService.approveRentalService(id);
   }
 
-  @Roles(userType.NOTADMIN, userType.ADMIN)
+  // @Roles(userType.NOTADMIN, userType.ADMIN)
   @Delete(':id')
   async deleteRental(
     @Param('id', ParseUUIDPipe) id: string,
@@ -187,6 +187,7 @@ export class RentalController {
       const userCreator = await this.rentalService.getUserIdByhomeId(id);
       //for check the creator prodcuts is equal to jwt request
       if (userCreator.user_id !== user.userId) {
+        console.log("ttt")
         throw new UnauthorizedException();
       }
 

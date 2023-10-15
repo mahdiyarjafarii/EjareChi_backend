@@ -5,11 +5,16 @@ import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
 export class UserService {
     constructor(private readonly prismaService: PrismaService){}
   async getUserInfoService(userId:string) {
-    return await this.prismaService.users.findUnique({
+    try{
+      return await this.prismaService.users.findUnique({
         where:{
             user_id:userId
         }
     })
+    }catch(error){
+      return {}
+    }
+
   }
   async getUserFavService(userId:string) {
     const user= await this.prismaService.users.findUnique({
