@@ -44,7 +44,6 @@ async getAllReservations(
      }
 }
 
-
 async  createReservationService({
     startDate,
     endDate,
@@ -100,4 +99,33 @@ async deleteReservations(id:number,user:UserType){
     
 }
 
+async approvedReservationsService(id:number,user:UserType){
+    // console.log(user)
+    try{
+        const reservatins=await this.prismaService.reservations.findFirst({
+            where:{
+                reservations_id:id
+            }
+        })
+
+        // if( reservatins.author_id != user.userId){
+        //     console.log("not matching")
+        // }
+        
+          await this.prismaService.reservations.update({
+            where: {
+              reservations_id: id,
+            },
+            data: {
+              approve: true,
+            },
+          })
+        
+          return `reservatins with id :${id} is updated`
+        
+    }catch(error){
+       console.log(error) 
+    }
+
+}
 }

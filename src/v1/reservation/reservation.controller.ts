@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post,Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post,Put,Query } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { ReservationsEntity, creatReservations } from './dto/reservatins.dto';
 import { User, UserType } from '../decorators/user.decorator';
@@ -45,5 +45,14 @@ export class ReservationController {
     @User() user?: UserType,
   ){
     return  await this.reservationService.deleteReservations(id,user)
+  }
+
+  @Put(':id')
+  async approevedReservations(
+    @Param('id') id: number,
+    @User() user?: UserType,
+  ){
+    
+    return  await this.reservationService.approvedReservationsService(id,user)
   }
 }
