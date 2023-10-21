@@ -14,6 +14,7 @@ import { ESSearchModule } from './infrastructure/elasticsearch/elasticsearch.mod
 import { LoggerModule } from 'nestjs-pino';
 import { ReservationModule } from './v1/reservation/reservation.module';
 import { UserModule } from './v1/user/user.module';
+import { MailModule } from './v1/mail/mail.module';
 
 @Module({
   imports: [
@@ -23,7 +24,9 @@ import { UserModule } from './v1/user/user.module';
     AuthModule,
     ReservationModule,
     SearchModule,
-    UserModule
+    UserModule,
+    MailModule
+
     // LoggerModule.forRoot({
     //   pinoHttp: {
     //     transport: {
