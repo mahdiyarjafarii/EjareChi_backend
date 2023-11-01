@@ -24,7 +24,7 @@ import {
   RentalUpdateReq,
 } from './dtos/rental.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { userType } from '@prisma/client';
+
 import { User, UserType } from '../decorators/user.decorator';
 import { Roles } from '../decorators/roles.decorator';
 import * as multer from 'multer';
@@ -94,6 +94,7 @@ export class RentalController {
     FilesInterceptor('images', 7, {
       storage: multer.diskStorage({
         destination: function (req, file, cb) {
+          console.log(file,cb)
           const destinationPath = `${cwd()}/uploads/tmp`;
 
           if (!existsSync(destinationPath)) {
@@ -113,7 +114,7 @@ export class RentalController {
     @Body() productDTO: RentalCreateReq,
     @User() user?: UserType,
   ): Promise<RentalEntity> {
-    console.log({ images });
+    console.log({ images }),"tttt";
     // console.log({ productDTO });
     // console.log(user)
     // const testID = '80678f63-3571-4941-8887-a7afb7d62e61';
@@ -135,11 +136,11 @@ export class RentalController {
     });
 
     if (images?.length) {
-      for (const image of images) {
-        const outputPath = `${cwd()}/uploads/tmp/${image.filename}`;
+      // for (const image of images) {
+      //   const outputPath = `${cwd()}/uploads/tmp/${image.filename}`;
 
-        await sharp(image.path).webp({ quality: 80 }).toFile(outputPath);
-      }
+      //   await sharp(image.path).webp({ quality: 80 }).toFile(outputPath);
+      // }
 
       await this.rentalService.writeImagePathToDB(images, dbRes.rental_id);
       renameSync(`${cwd()}/uploads/tmp`, `${cwd()}/uploads/${dbRes.rental_id}`);
@@ -148,7 +149,7 @@ export class RentalController {
     return dbRes;
   }
 
-  @Roles(userType.NOTADMIN, userType.ADMIN)
+  // @Roles(userType.NOTADMIN, userType.ADMIN)
   @Put('/update/:id')
   async updateRental(
     @Param('id', ParseUUIDPipe) id: string,
@@ -168,7 +169,7 @@ export class RentalController {
     return await this.rentalService.updateRentalService(id, productUpdateDTO);
   }
 
-  @Roles(userType.ADMIN)
+  // @Roles(userType.ADMIN)
   @Post('/approve/:id')
   async approveRental(
     @Param('id', ParseUUIDPipe) id: string,

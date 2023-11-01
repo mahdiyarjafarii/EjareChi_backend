@@ -257,7 +257,7 @@ export class RentalService {
       data: images.map((image: Express.Multer.File) => {
         return {
           rental_id: rentalID,
-          image_data: image.filename,
+          image_data: `http://http://localhost:9000/uploads/${rentalID}/${image.filename}`,
         };
       }),
     });

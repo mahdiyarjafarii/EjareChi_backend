@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User, UserType } from '../decorators/user.decorator';
+// import { User, UserType } from '../decorators/user.decorator';
 
 @Controller(
     {
@@ -21,7 +21,7 @@ export class UserController {
   @Get('getFavorite/:userId')
   async getUserFav(
     @Param('userId') userId: string,
-    @Req() req: Request,
+    // @Req() req: Request,
     // @User() user?: UserType
   ) {
     // console.log(req.c)

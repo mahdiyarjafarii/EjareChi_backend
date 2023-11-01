@@ -5,11 +5,11 @@ import { UserCreateReq, UserEntity } from './dtos/users.dto';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { Redis } from 'ioredis';
-import { userType } from '@prisma/client';
+// import { userType } from '@prisma/client';
 
 interface payloadJWT {
   userId: string;
-  user_type: userType;
+  user_type: any;
   iat: number;
   exp: number;
 }

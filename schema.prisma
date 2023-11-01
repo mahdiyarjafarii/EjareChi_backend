@@ -45,7 +45,7 @@ model RentalImages {
   image_id   String  @id @default(uuid())
   rental_id  String
   // image_data can be blob or absolute path to image
-  image_data String
+  image_data String @db.VarChar(512) 
   rentals    rentals @relation(fields: [rental_id], references: [rental_id])
 }
 
