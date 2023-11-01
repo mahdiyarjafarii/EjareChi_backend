@@ -53,18 +53,25 @@ export class RentalController {
     @Query('lng') mapLongitude?: number,
     @Query('zoom') zoom?: number,
     @Query('userId') userId?: string,
-
+    @Query('maxLat') maxLat?: number,
+    @Query('minLat') minLat?: number,
+    @Query('maxLng') maxLng?: number,
+    @Query('minLng') minLng?: number,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
-
-
     return await this.rentalService.getAllRentalsService(
       approvedStatus,
       categoryName,
       mapLatitude,
       mapLongitude,
       zoom,
-      userId
+      {
+        maxLat,
+        minLat,
+        maxLng,
+        minLng,
+      },
+      userId,
     );
   }
 
@@ -188,7 +195,7 @@ export class RentalController {
       const userCreator = await this.rentalService.getUserIdByhomeId(id);
       //for check the creator prodcuts is equal to jwt request
       if (userCreator.user_id !== user.userId) {
-        console.log("ttt")
+        console.log('ttt');
         throw new UnauthorizedException();
       }
 
