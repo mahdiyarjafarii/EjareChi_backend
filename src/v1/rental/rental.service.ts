@@ -62,14 +62,20 @@ export class RentalService {
     mapLatitude?: number,
     mapLongitude?: number,
     zoom?: number,
-    userId?:string
+    bounds?: {
+      maxLat?: number;
+      minLat?: number;
+      maxLng?: number;
+      minLng?: number;
+    },
+    userId?: string,
   ): Promise<RentalEntity[]> {
-    console.log({zoom});
-    
-    const lngTolerance = 180 / Math.pow(2, 2 * (zoom - 10));
-    console.log({lngTolerance});
-    
-    const latTolerance = lngTolerance / 2;
+    console.log({ bounds });
+
+    // const lngTolerance = 180 / Math.pow(2, 2 * (zoom - 10));
+    // console.log({ lngTolerance });
+
+    // const latTolerance = lngTolerance / 2;
 
     const searchQueryObj = {
       ...(approvedStatus && {
@@ -77,26 +83,28 @@ export class RentalService {
       }),
       ...(categoryName && { category: { query_name: categoryName } }),
       ...(userId && {
-        user_id:userId
-      })
+        user_id: userId,
+      }),
     };
 
     const latQueryObj = {
-      ...(mapLatitude && {
-        latitude: {
-          gte: mapLatitude - latTolerance,
-          lte: mapLatitude + latTolerance,
-        },
-      }),
+      ...(bounds.minLat &&
+        bounds.maxLat && {
+          latitude: {
+            gte: bounds.minLat,
+            lte: bounds.maxLat,
+          },
+        }),
     };
 
     const lngQueryObj = {
-      ...(mapLongitude && {
-        longitude: {
-          gte: mapLongitude - lngTolerance,
-          lte: mapLongitude + lngTolerance,
-        },
-      }),
+      ...(bounds.minLng &&
+        bounds.maxLng && {
+          longitude: {
+            gte: bounds.minLng,
+            lte: bounds.maxLng,
+          },
+        }),
     };
 
     const Rentals = await this.prismaService.rentals.findMany({
@@ -119,7 +127,7 @@ export class RentalService {
       },
     });
     console.log(Rentals?.length);
-    
+
     if (Rentals?.length) {
       return Rentals.map((Rental) => new RentalEntity(Rental));
     } else {
