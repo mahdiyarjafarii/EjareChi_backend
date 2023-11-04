@@ -26,6 +26,19 @@ export class UserLoginReq{
 
 }
 
+export class UserForgetPassReq{
+  @IsString()
+  email :string
+}
+
+export class UserResetPassReq{
+  @IsString()
+  token:string
+
+  @IsString()
+  newPassword:string
+}
+
 
 export class UserEntity {
     constructor(partial: Partial<UserEntity>) {

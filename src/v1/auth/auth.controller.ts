@@ -1,6 +1,6 @@
 import { Controller, Get, HttpException, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserCreateReq, UserLoginReq } from './dtos/users.dto';
+import { UserCreateReq, UserForgetPassReq, UserLoginReq, UserResetPassReq } from './dtos/users.dto';
 import { Body, Req } from '@nestjs/common/decorators';
 import * as bcrypt from 'bcrypt';
 import { User, UserType } from '../decorators/user.decorator';
@@ -39,7 +39,7 @@ export class AuthController {
         const token = await this.authServices.generateToken(
           existingUser.user_id,
         );
-        await this.authServices.setTokenRedis(userLoginDto.email, token);
+        await this.authServices.setTokenRedis(userLoginDto.email, token,84600);
         console.log('use fresh token');
 
         return { access_token: token };
@@ -62,7 +62,7 @@ export class AuthController {
 
     const userCreated = await this.authServices.creatUser(userCreatDTO);
     const token = await this.authServices.generateToken(userCreated.user_id);
-    await this.authServices.setTokenRedis(userCreatDTO.email, token);
+    await this.authServices.setTokenRedis(userCreatDTO.email, token,84600);
     return { access_token: token };
   }
 
@@ -70,5 +70,16 @@ export class AuthController {
   async currentUser(@Req() request: Request) {
     const token = request.headers?.authorization?.split('Bearer ')[1];
     return this.authServices.getUserWithToken(token);
+  }
+
+  @Post('forgetPassword')
+  async forgetPassword(@Body() UserForgetPassReqDto:UserForgetPassReq ){
+
+    return this.authServices.forgetPasswordService(UserForgetPassReqDto)
+  }
+
+  @Post('resetPassword')
+  async resetPassword(@Body() UserResetPassReqDto:UserResetPassReq){
+    return this.authServices.resetPasswordServices(UserResetPassReqDto)
   }
 }
