@@ -31,18 +31,23 @@ import { join } from 'path';
     ReservationModule,
     SearchModule,
     UserModule,
-    MailModule
+    MailModule,
+    LoggerModule.forRoot({
+      // pinoHttp: {
+      //   formatters: {
+      //     level: (label) => {
+      //       return { level: label.toUpperCase() };
+      //     },
+      //   },
+      //   transport: {
+      //     target: 'pino-pretty',
+      //     options: {
+      //       singleLine: true,
 
-    // LoggerModule.forRoot({
-    //   pinoHttp: {
-    //     transport: {
-    //       target: 'pino-pretty',
-    //       options: {
-    //         singleLine: true,
-    //       },
-    //     },
-    //   },
-    // })
+      //     },
+      //   },
+      // },
+    }),
   ],
   controllers: [AppController],
   providers: [
