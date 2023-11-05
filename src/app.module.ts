@@ -36,7 +36,10 @@ import { LoggerMiddleware } from './logger.middleware';
     LoggerModule.forRoot({
       pinoHttp: {
         autoLogging: false,
-        redact: ['req', 'context'],
+        redact: {
+          paths: ['req'],
+          remove: true,
+        },
         // serializers: {
         //   ...pino.stdSerializers,
         //   log: customLogSerializer, // Use the custom serializer
