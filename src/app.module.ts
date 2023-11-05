@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -17,6 +17,7 @@ import { UserModule } from './v1/user/user.module';
 import { MailModule } from './v1/mail/mail.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { LoggerMiddleware } from './logger.middleware';
 
 @Module({
   imports: [
@@ -33,20 +34,23 @@ import { join } from 'path';
     UserModule,
     MailModule,
     LoggerModule.forRoot({
-      // pinoHttp: {
-      //   formatters: {
-      //     level: (label) => {
-      //       return { level: label.toUpperCase() };
-      //     },
-      //   },
-      //   transport: {
-      //     target: 'pino-pretty',
-      //     options: {
-      //       singleLine: true,
-
-      //     },
-      //   },
-      // },
+      pinoHttp: {
+        autoLogging: false,
+        redact: ['req', 'context'],
+        // serializers: {
+        //   ...pino.stdSerializers,
+        //   log: customLogSerializer, // Use the custom serializer
+        // },
+        customProps: (req, res) => ({
+          context: 'HTTP',
+        }),
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            singleLine: true,
+          },
+        },
+      },
     }),
   ],
   controllers: [AppController],
@@ -62,4 +66,9 @@ import { join } from 'path';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    console.log(123);
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
