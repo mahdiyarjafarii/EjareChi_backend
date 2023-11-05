@@ -121,7 +121,7 @@ export class RentalController {
     @Body() productDTO: RentalCreateReq,
     @User() user?: UserType,
   ): Promise<RentalEntity> {
-    console.log({ images }),"tttt";
+    console.log( images ,"tt");
     // console.log({ productDTO });
     // console.log(user)
     // const testID = '80678f63-3571-4941-8887-a7afb7d62e61';
