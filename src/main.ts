@@ -5,15 +5,17 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { PrismaService } from './infrastructure/prisma/prisma.service';
 import { Logger } from 'nestjs-pino';
 import { WinstonModule } from 'nest-winston';
+import { transports, format } from 'winston';
 import { instance } from 'logger/winston.logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
     bufferLogs: true,
-    logger: WinstonModule.createLogger({
-      instance: instance,
-    }),
+    // logger: WinstonModule.createLogger({
+    //   instance: instance,
+    // }),
+    logger: instance,
   });
 
   //app.useLogger(app.get(Logger));
