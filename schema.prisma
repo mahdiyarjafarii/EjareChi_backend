@@ -30,6 +30,8 @@ model rentals {
   price       Float
   approved    Boolean        @default(false)
   user_id     String
+  province    String         @default("")
+  subsetprovince String         @default("")
   latitude    Float          @default(35.7219)
   longitude   Float          @default(51.3347)
   Strictness_number Int      @default(2) 
@@ -38,7 +40,7 @@ model rentals {
   images      RentalImages[]
   created_at  DateTime       @default(now())
   updated_at  DateTime       @updatedAt
-   reservations Reservations[]
+  reservations Reservations[]
 }
 
 model RentalImages {
