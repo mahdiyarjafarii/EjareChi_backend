@@ -17,8 +17,7 @@ import { UserModule } from './v1/user/user.module';
 import { MailModule } from './v1/mail/mail.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { LoggerMiddleware } from './logger.middleware';
-import { RequestLoggerMiddleware } from './win.middleware';
+import { RequestLoggerMiddleware } from './logger.middleware';
 
 @Module({
   imports: [
@@ -70,12 +69,7 @@ import { RequestLoggerMiddleware } from './win.middleware';
     },
   ],
 })
-// export class AppModule implements NestModule {
-//   configure(consumer: MiddlewareConsumer) {
-//     console.log(123);
-//     consumer.apply(LoggerMiddleware).forRoutes('*');
-//   }
-// }
+
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     console.log(123);
