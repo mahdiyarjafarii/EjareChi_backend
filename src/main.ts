@@ -4,14 +4,19 @@ import { VersioningType, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { PrismaService } from './infrastructure/prisma/prisma.service';
 import { Logger } from 'nestjs-pino';
+import { WinstonModule } from 'nest-winston';
+import { instance } from 'logger/winston.logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
     bufferLogs: true,
+    logger: WinstonModule.createLogger({
+      instance: instance,
+    }),
   });
 
-  app.useLogger(app.get(Logger));
+  //app.useLogger(app.get(Logger));
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);

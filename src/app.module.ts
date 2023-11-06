@@ -18,6 +18,7 @@ import { MailModule } from './v1/mail/mail.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { LoggerMiddleware } from './logger.middleware';
+import { RequestLoggerMiddleware } from './win.middleware';
 
 @Module({
   imports: [
@@ -33,28 +34,28 @@ import { LoggerMiddleware } from './logger.middleware';
     SearchModule,
     UserModule,
     MailModule,
-    LoggerModule.forRoot({
-      pinoHttp: {
-        autoLogging: false,
-        redact: {
-          paths: ['req'],
-          remove: true,
-        },
-        // serializers: {
-        //   ...pino.stdSerializers,
-        //   log: customLogSerializer, // Use the custom serializer
-        // },
-        customProps: (req, res) => ({
-          context: 'HTTP',
-        }),
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            singleLine: true,
-          },
-        },
-      },
-    }),
+    // LoggerModule.forRoot({
+    //   pinoHttp: {
+    //     autoLogging: false,
+    //     redact: {
+    //       paths: ['req'],
+    //       remove: true,
+    //     },
+    //     // serializers: {
+    //     //   ...pino.stdSerializers,
+    //     //   log: customLogSerializer, // Use the custom serializer
+    //     // },
+    //     customProps: (req, res) => ({
+    //       context: 'HTTP',
+    //     }),
+    //     transport: {
+    //       target: 'pino-pretty',
+    //       options: {
+    //         singleLine: true,
+    //       },
+    //     },
+    //   },
+    // }),
   ],
   controllers: [AppController],
   providers: [
@@ -69,9 +70,15 @@ import { LoggerMiddleware } from './logger.middleware';
     },
   ],
 })
+// export class AppModule implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     console.log(123);
+//     consumer.apply(LoggerMiddleware).forRoutes('*');
+//   }
+// }
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     console.log(123);
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
   }
 }
