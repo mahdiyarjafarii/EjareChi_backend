@@ -18,6 +18,7 @@ import { MailModule } from './v1/mail/mail.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { RequestLoggerMiddleware } from './logger.middleware';
+import { LoggingInterceptor } from './logger.interceptor';
 
 @Module({
   imports: [
@@ -64,15 +65,20 @@ import { RequestLoggerMiddleware } from './logger.middleware';
       useClass: UserInterceptor,
     },
     {
+      provide: APP_INTERCEPTOR, // Use the APP_INTERCEPTOR token
+      useClass: LoggingInterceptor, // Add your interceptor here
+    },
+    {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
   ],
 })
+export class AppModule {}
 
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    console.log(123);
-    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
-  }
-}
+// export class AppModule implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     console.log(123);
+//     consumer.apply(LoggingInterceptor).forRoutes('*');
+//   }
+// }
