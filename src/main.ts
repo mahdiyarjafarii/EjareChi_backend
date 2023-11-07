@@ -3,10 +3,9 @@ import { AppModule } from './app.module';
 import { VersioningType, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { PrismaService } from './infrastructure/prisma/prisma.service';
-import { Logger } from 'nestjs-pino';
-import { WinstonModule } from 'nest-winston';
-import { transports, format } from 'winston';
 import { instance } from 'logger/winston.logger';
+import * as express from 'express';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -37,6 +36,9 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+
+  //Handling static pictures
+  app.use('/uploads', express.static(join(__dirname, '..', '..', 'uploads')));
 
   //Configuring swagger
   const config = new DocumentBuilder()
