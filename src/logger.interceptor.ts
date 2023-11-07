@@ -17,26 +17,43 @@ export class LoggingInterceptor implements NestInterceptor {
       tap((resData) => {
         const response = context.switchToHttp().getResponse();
         const request = context.switchToHttp().getRequest();
-        const responseTime = Date.now() - now;
+        const now = Date.now();
+        const responseTime = now - request.startTime; // Assuming request.startTime is when the request handling started
         const responseBody = JSON.stringify(resData);
+        const responseSize = Buffer.byteLength(responseBody, 'utf8');
+        const statusCode = response.statusCode;
 
-        // console.log(
-        //   `Request: ${request.method} ${request.url}`,
-        //   `Response: ${response.statusCode}`,
-        //   `Response Time: ${responseTime}ms`,
-        //   `Response Body: ${JSON.stringify(responseBody)}`, // Log the response body
-        // );
-        const logObj = {
+        // Gather client IP using a function that respects reverse proxies
+        const getClientIp = (req) => {
+          return req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.ip;
+        };
+
+        const shouldLogBody = statusCode < 200 || statusCode >= 300;
+
+        const logObj:any = {
+          timestamp: new Date().toISOString(),
+          clientIp: getClientIp(request),
           method: request.method,
           url: request.url,
+          //httpVersion: request.httpVersion,
           status: response.statusCode,
-          req: { body: response.body, headers: {} },
-          res: {
-            headers: response.getHeaders(),
-            body: responseBody,
-          },
+          responseSize: responseSize,
+          referrer: request.headers['referrer'] || request.headers['referer'] || '-',
+          userAgent: request.headers['user-agent'] || '-',
+          responseTime: `${responseTime}ms`
         };
-        this.logger.log(JSON.stringify(logObj), 'HttpClient');
+        console.log({shouldLogBody});
+        
+        if (shouldLogBody) {
+          logObj.requestHeaders = request.headers;
+          logObj.requestBody = request.body;
+          logObj.responseHeaders = response.getHeaders();
+          logObj.responseBody = resData; // assuming resData is already the response body
+        }
+        
+        this.logger.log(logObj, 'HttpClient');
+
+
       }),
     );
   }
