@@ -24,18 +24,15 @@ export class RentalService {
       latitude,
       longitude,
       Strictness_number,
+      province,
+      subsetprovince
     }: RentalCreateReq,
     user_id: string,
   ): Promise<RentalEntity> {
-    // console.log({
-    //   name,
-    //   description,
-    //   price,
-    //   category_id,
-    //   latitude,
-    //   longitude,
-    //   user_id,
-    // });
+    console.log({
+      province,
+      subsetprovince
+    });
 
     const createdRental = await this.prismaService.rentals.create({
       data: {
@@ -45,6 +42,8 @@ export class RentalService {
         Strictness_number,
         latitude,
         longitude,
+        province,
+        subsetprovince,
         user: { connect: { user_id } },
         category: { connect: { category_id } },
       },

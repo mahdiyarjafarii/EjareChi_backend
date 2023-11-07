@@ -35,6 +35,14 @@ export class RentalCreateReq {
 
   // @IsString()
   // user_id: string
+  // @IsString()
+  @IsOptional()
+  province:string     
+  
+  
+  // @IsString()
+  @IsOptional()
+  subsetprovince:string         
 
   @IsArray()
   @IsOptional()
@@ -45,6 +53,8 @@ export class RentalCreateReq {
   @Min(0, { message: 'Minimum value is 1' }) // Set the minimum value (0 in this example)
   @Max(100, { message: 'Maximum value is 6' }) // Set the maximum value (100 in this example)
   Strictness_number?: number;
+
+  
 }
 
 export class RentalUpdateReq {
