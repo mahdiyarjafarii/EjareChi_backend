@@ -25,12 +25,17 @@ export class LoggingInterceptor implements NestInterceptor {
 
         // Gather client IP using a function that respects reverse proxies
         const getClientIp = (req) => {
-          return req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.ip;
+          return (
+            req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.ip
+          );
         };
 
         const shouldLogBody = statusCode < 200 || statusCode >= 300;
 
-        const logObj:any = {
+        const logObj: any = {
           timestamp: new Date().toISOString(),
           clientIp: getClientIp(request),
           method: request.method,
@@ -38,22 +43,21 @@ export class LoggingInterceptor implements NestInterceptor {
           //httpVersion: request.httpVersion,
           status: response.statusCode,
           responseSize: responseSize,
-          referrer: request.headers['referrer'] || request.headers['referer'] || '-',
+          referrer:
+            request.headers['referrer'] || request.headers['referer'] || '-',
           userAgent: request.headers['user-agent'] || '-',
-          responseTime: `${responseTime}ms`
+          responseTime: `${responseTime}ms`,
         };
-        console.log({shouldLogBody});
-        
+        console.log({ shouldLogBody });
+
         if (shouldLogBody) {
           logObj.requestHeaders = request.headers;
           logObj.requestBody = request.body;
           logObj.responseHeaders = response.getHeaders();
           logObj.responseBody = resData; // assuming resData is already the response body
         }
-        
+
         this.logger.log(logObj, 'HttpClient');
-
-
       }),
     );
   }

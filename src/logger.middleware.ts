@@ -5,47 +5,46 @@ import { Request, Response, NextFunction } from 'express';
 export class RequestLoggerMiddleware implements NestMiddleware {
   private readonly logger = new Logger();
 
-  use(req: Request, res: Response, next: NextFunction) {
-    res.on('finish', (e) => {
+  use(request: Request, response: Response, next: NextFunction) {
+    const reqStart = Date.now();
+    response.on('finish', (e) => {
       const context = 'HttpClient';
 
-      const statusCode = res.statusCode;
+      const resEnd = Date.now();
 
-      const { body, method, originalUrl, headers } = req;
+      const statusCode = response.statusCode;
 
-      const oldWrite = res.write;
-      const oldEnd = res.end;
-      const chunks = [];
-      res.write = function (chunk: any) {
-        console.log({chunk});
-        
-        chunks.push(chunk);
-        return oldWrite.apply(res, chunk);
+      // Gather client IP using a function that respects reverse proxies
+      const getClientIp = (req) => {
+        return (
+          req.headers['x-forwarded-for'] ||
+          req.connection.remoteAddress ||
+          req.socket.remoteAddress ||
+          req.ip
+        );
       };
-      res.end = function (chunk: any) {
-        if (chunk) {
-          chunks.push(chunk);
-        }
-        return oldEnd.apply(res, chunk);
+
+      const shouldLogBody =
+        statusCode < 200 || (statusCode >= 300 && statusCode !== 304);
+
+      const logObj: any = {
+        timestamp: new Date().toISOString(),
+        clientIp: getClientIp(request),
+        method: request.method,
+        url: request.url,
+        status: response.statusCode,
+        referrer:
+          request.headers['referrer'] || request.headers['referer'] || '-',
+        userAgent: request.headers['user-agent'] || '-',
+        responseTime: `${resEnd - reqStart}ms`,
       };
-      //const { cookie, headers:getHeaders() } = res;
 
-      if (statusCode) {
-        //this.logger.log(`[${req.method}] ${req.url} - ${statusCode} - req : ${{body, method, originalUrl, headers}}`);
-        //console.log({ resBodyBuffer });
-
-        const logObj = {
-          method: req.method,
-          url: req.url,
-          status: statusCode,
-          req: { body, headers: {} },
-          res: {
-            //headers: res.getHeaders(),
-            body: Buffer.concat(chunks).toString('utf8'),
-          },
-        };
-        this.logger.log(JSON.stringify(logObj), context);
+      if (shouldLogBody) {
+        logObj.requestHeaders = request.headers;
+        logObj.requestBody = request.body;
       }
+
+      this.logger.log(logObj, context);
     });
 
     next();
