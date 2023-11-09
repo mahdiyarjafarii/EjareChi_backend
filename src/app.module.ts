@@ -13,6 +13,7 @@ import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { UserInterceptor } from './v1/interceptors/user.interceptor';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ReservationModule } from './v1/reservation/reservation.module';
+import { ContextModule } from './infrastructure/context/context.module';
 // import { SearchModule } from './infrastructure/elasticsearch/elasticsearch.module';
 
 @Module({
@@ -25,6 +26,7 @@ import { ReservationModule } from './v1/reservation/reservation.module';
     SearchModule,
     UserModule,
     MailModule,
+    ContextModule
     // LoggerModule.forRoot({
     //   pinoHttp: {
     //     autoLogging: false,

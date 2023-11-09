@@ -1,6 +1,7 @@
 import { ClsModule } from "nestjs-cls";
-import ClsContextStorageService, { ContextStorageServiceKey } from "./cls.service";
+import ClsContextStorageService, { ContextStorageServiceKey } from "./context.service";
 import { Global, Module } from "@nestjs/common";
+import { v4 } from 'uuid';
 
 @Global()
 @Module({

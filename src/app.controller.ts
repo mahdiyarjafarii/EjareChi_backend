@@ -1,12 +1,21 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Req } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Request } from 'express';
+import { ClsService } from 'nestjs-cls';
+import ClsContextStorageService from './infrastructure/context/context.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService , 
+    private readonly cls: ClsContextStorageService
+    ) {}
 
   @Get()
-  getHello(): string {
+  getHello(
+    @Req() req:Request
+  ): string {
+    console.log({"headers":this.cls.getContextId()});
+    
     return this.appService.getHello();
   }
 }
