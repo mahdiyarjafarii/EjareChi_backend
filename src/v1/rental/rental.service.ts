@@ -192,6 +192,10 @@ export class RentalService {
           province,
           subsetprovince,          
         },
+        include: {
+          user: true,
+          category: true,
+        },
       });
       return new RentalEntity(rental);
     } catch (error) {

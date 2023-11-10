@@ -163,16 +163,16 @@ export class RentalController {
     @Body() productUpdateDTO: RentalUpdateReq,
     @User() user?: UserType,
   ): Promise<RentalEntity> {
-    try {
-      //for finde creator of home with id in query
-      const userCreator = await this.rentalService.getUserIdByhomeId(id);
-      //for check the creator prodcuts is equal to jwt request
-      if (userCreator.user_id !== user.userId) {
-        throw new UnauthorizedException();
-      }
-    } catch (error) {
-      throw new UnauthorizedException();
-    }
+    // try {
+    //   //for finde creator of home with id in query
+    //   const userCreator = await this.rentalService.getUserIdByhomeId(id);
+    //   //for check the creator prodcuts is equal to jwt request
+    //   if (userCreator.user_id !== user.userId) {
+    //     throw new UnauthorizedException();
+    //   }
+    // } catch (error) {
+    //   throw new UnauthorizedException();
+    // }
     return await this.rentalService.updateRentalService(id, productUpdateDTO);
   }
 
