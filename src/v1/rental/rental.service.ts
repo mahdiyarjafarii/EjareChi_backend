@@ -178,7 +178,7 @@ export class RentalService {
     }: RentalUpdateReq,
   ) {
     try {
-      const Rental = await this.prismaService.rentals.update({
+      const rental = await this.prismaService.rentals.update({
         where: {
           rental_id: id,
         },
@@ -193,7 +193,7 @@ export class RentalService {
           subsetprovince,          
         },
       });
-      return new RentalEntity(Rental);
+      return new RentalEntity(rental);
     } catch (error) {
       console.log(error);
       throw new Error(error);
