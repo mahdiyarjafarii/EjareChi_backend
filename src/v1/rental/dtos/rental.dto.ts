@@ -60,7 +60,7 @@ export class RentalCreateReq {
 export class RentalUpdateReq {
   @IsString()
   @IsOptional()
-  name: string;
+  name?: string;
 
   @IsString()
   @IsOptional()
@@ -69,11 +69,11 @@ export class RentalUpdateReq {
   //category: CategoriesType;
   @IsNumber()
   @IsOptional()
-  category_id: number;
+  category_id?: number;
 
   @IsNumber()
   @IsOptional()
-  price: number;
+  price?: number;
 
   @IsNumber()
   @IsOptional()
@@ -83,10 +83,24 @@ export class RentalUpdateReq {
   @IsOptional()
   longitude?: number;
 
+  @IsString()
+  @IsOptional()
+  province?:string     
+  
+  
+  @IsString()
+  @IsOptional()
+  subsetprovince?:string
+  
+  @IsArray()
+  @IsOptional()
+  images?: string[];
+
   @IsNumber()
+  @IsOptional()
   @Min(0, { message: 'Minimum value is 1' }) // Set the minimum value (0 in this example)
   @Max(100, { message: 'Maximum value is 6' }) // Set the maximum value (100 in this example)
-  Strictness_number: number;
+  Strictness_number?: number;
 }
 
 export class RentalEntity {

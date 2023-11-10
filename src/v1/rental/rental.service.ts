@@ -171,6 +171,10 @@ export class RentalService {
       category_id,
       latitude,
       longitude,
+      images,
+      Strictness_number,
+      province,
+      subsetprovince
     }: RentalUpdateReq,
   ) {
     try {
@@ -185,6 +189,8 @@ export class RentalService {
           latitude,
           longitude,
           price,
+          province,
+          subsetprovince,          
         },
       });
       return new RentalEntity(Rental);
