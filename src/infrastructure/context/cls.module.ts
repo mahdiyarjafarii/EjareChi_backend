@@ -1,9 +1,10 @@
-// import { Module } from '@nestjs/common';
-// import ClsContextStorageService, { ContextStorageServiceKey } from './cls.service';
-//  './cls.service';
+import { Module } from '@nestjs/common';
+import ClsContextStorageService, {
+  ContextStorageServiceKey,
+} from './context.service';
 
-// @Module({
-//   providers: [ClsContextStorageService ],
-//   exports: [ClsContextStorageService , ContextStorageServiceKey],
-// })
-// export class CLSModule {}
+@Module({
+  providers: [ClsContextStorageService],
+  exports: [ClsContextStorageService, ContextStorageServiceKey],
+})
+export class CLSModule {}
