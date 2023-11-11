@@ -1,4 +1,4 @@
-FROM node:16.13.0-alpine3.14
+FROM node:20-alpine3.17
 
 WORKDIR /app
 
@@ -13,4 +13,4 @@ RUN npx prisma generate
 
 
 EXPOSE 9000
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main"]
