@@ -13,4 +13,4 @@ RUN npx prisma generate
 
 
 EXPOSE 9000
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main"]
