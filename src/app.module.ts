@@ -1,3 +1,4 @@
+import { ClsModule } from 'nestjs-cls';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthGuard } from './guards/auth.guard';
@@ -13,7 +14,7 @@ import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { UserInterceptor } from './v1/interceptors/user.interceptor';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ReservationModule } from './v1/reservation/reservation.module';
-//import { ContextModule } from './infrastructure/context/context.module';
+import { ContextModule } from './infrastructure/context/context.module';
 // import { SearchModule } from './infrastructure/elasticsearch/elasticsearch.module';
 
 @Module({
@@ -26,7 +27,23 @@ import { ReservationModule } from './v1/reservation/reservation.module';
     SearchModule,
     UserModule,
     MailModule,
-    //ContextModule
+    // ClsModule.forRoot({
+    //   middleware: {
+    //     //global: true,
+
+    //     // automatically mount the
+    //     // ClsMiddleware for all routes
+    //     mount: true,
+    //     // and use the setup method to
+    //     // provide default store values.
+    //     // setup: (cls, req) => {
+    //     //   cls.set('userId', req.headers['x-user-id']);
+    //     // },
+    //     generateId: true,
+    //     idGenerator: (req: Request) => req.headers['x-correlation-id'] ?? v4(),
+    //   },
+    // }),
+    ContextModule,
     // LoggerModule.forRoot({
     //   pinoHttp: {
     //     autoLogging: false,

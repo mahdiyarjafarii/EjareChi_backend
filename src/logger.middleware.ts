@@ -1,8 +1,15 @@
-import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import { Inject, Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import ClsContextStorageService, {
+  ContextStorageServiceKey,
+} from './infrastructure/context/context.service';
 
 @Injectable()
 export class RequestLoggerMiddleware implements NestMiddleware {
+  constructor(
+    @Inject(ContextStorageServiceKey)
+    private readonly cls: ClsContextStorageService,
+  ) {}
   private readonly logger = new Logger();
 
   use(request: Request, response: Response, next: NextFunction) {
@@ -33,6 +40,7 @@ export class RequestLoggerMiddleware implements NestMiddleware {
         method: request.method,
         url: request.url,
         status: response.statusCode,
+        correlationId: this.cls.getContextId(),
         referrer:
           request.headers['referrer'] || request.headers['referer'] || '-',
         userAgent: request.headers['user-agent'] || '-',
