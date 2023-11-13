@@ -16,6 +16,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ReservationModule } from './v1/reservation/reservation.module';
 import { ContextModule } from './infrastructure/context/context.module';
 // import { SearchModule } from './infrastructure/elasticsearch/elasticsearch.module';
+import { NotificationModule } from './v1/notification/notification.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { ContextModule } from './infrastructure/context/context.module';
     //   },
     // }),
     ContextModule,
+    NotificationModule,
     // LoggerModule.forRoot({
     //   pinoHttp: {
     //     autoLogging: false,
