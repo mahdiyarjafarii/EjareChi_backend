@@ -32,6 +32,7 @@ import { cwd } from 'process';
 import { existsSync, mkdirSync, renameSync } from 'fs';
 import { SearchService } from '../search/search.service';
 import sharp from 'sharp';
+import { ParseLimitPipe } from './pipes/parseLimit.pipe';
 //import { AuthGuard } from './auth.guard';
 
 @Controller({
@@ -57,8 +58,12 @@ export class RentalController {
     @Query('minLat') minLat?: number,
     @Query('maxLng') maxLng?: number,
     @Query('minLng') minLng?: number,
+    @Query("limit" , new ParseLimitPipe(40)) limit?: number,
+    @Query("page" , new ParseLimitPipe(1)) page?: number,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
+    console.log({limit,page});
+    
     return await this.rentalService.getAllRentalsService(
       approvedStatus,
       categoryName,
