@@ -8,7 +8,9 @@ export class ParseLimitPipe implements PipeTransform<string, number> {
 
   }
   transform(value: string, metadata: ArgumentMetadata): number {
-    const parsedLimit = value ? parseInt(value, 10) : this.userInput;
+    console.log({value});
+    
+    const parsedLimit = !isNaN(+value) ? parseInt(value, 10)  : this.userInput;
 
     if (isNaN(parsedLimit)) {
       throw new BadRequestException('Invalid limit parameter. Numeric string is expected.');

@@ -110,8 +110,12 @@ export class RentalService {
 
     const [Rentals, totalCount] = await Promise.all([
       this.prismaService.rentals.findMany({
-        take: limit,
-        skip: limit * page,
+        ...(
+          limit !== 0 && {take: limit}
+        ),
+        ...(
+          limit !== 0 && {skip: limit * page}
+        ),
         include: {
           images: {
             select: {
