@@ -76,6 +76,8 @@ export class RentalController {
         maxLng,
         minLng,
       },
+      limit,
+      page,
       userId,
     );
   }

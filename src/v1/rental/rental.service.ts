@@ -67,6 +67,8 @@ export class RentalService {
       maxLng?: number;
       minLng?: number;
     },
+    limit?:number,
+    page?:number,
     userId?: string,
   ): Promise<RentalEntity[]> {
     console.log({ bounds });
@@ -106,26 +108,39 @@ export class RentalService {
         }),
     };
 
-    const Rentals = await this.prismaService.rentals.findMany({
-      //include is used for doing JOINS
-      include: {
-        images: {
-          select: {
-            image_data: true,
+    const [Rentals, totalCount] = await Promise.all([
+      this.prismaService.rentals.findMany({
+        take: limit,
+        skip: limit * page,
+        include: {
+          images: {
+            select: {
+              image_data: true,
+            },
+          },
+          category: {
+            select: {
+              icon_name: true,
+            },
           },
         },
-        category: {
-          select: {
-            icon_name: true,
-          },
+        where: {
+          ...searchQueryObj,
+          AND: [lngQueryObj, latQueryObj],
         },
-      },
-      where: {
-        ...searchQueryObj,
-        AND: [lngQueryObj, latQueryObj],
-      },
-    });
+      }),
+      this.prismaService.rentals.count({
+        where: {
+          ...searchQueryObj,
+          AND: [lngQueryObj, latQueryObj],
+        },
+      }),
+    ]);
     console.log(Rentals?.length);
+    console.log({totalCount});
+    
+    console.log({hasMore : (totalCount - limit * page) % limit < 1 ? false : true });
+    
 
     if (Rentals?.length) {
       return Rentals.map((Rental) => new RentalEntity(Rental));
