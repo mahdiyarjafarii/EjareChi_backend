@@ -58,11 +58,11 @@ export class RentalController {
     @Query('minLat') minLat?: number,
     @Query('maxLng') maxLng?: number,
     @Query('minLng') minLng?: number,
-    @Query("limit" , new ParseLimitPipe(40)) limit?: number,
+    @Query("limit" , new ParseLimitPipe(0)) limit?: number,
     @Query("page" , new ParseLimitPipe(1)) page?: number,
     @User() user?: UserType,
   ): Promise<RentalEntity[]> {
-    console.log({limit,page});
+    // console.log({limit,page});
     
     return await this.rentalService.getAllRentalsService(
       approvedStatus,

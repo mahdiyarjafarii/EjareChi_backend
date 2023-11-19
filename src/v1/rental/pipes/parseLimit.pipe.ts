@@ -8,7 +8,10 @@ export class ParseLimitPipe implements PipeTransform<string, number> {
 
   }
   transform(value: string, metadata: ArgumentMetadata): number {
-    console.log({value});
+    if (value === undefined || value === null) {
+      return 0; // Return 0 when value is not provided
+    }
+  
     
     const parsedLimit = !isNaN(+value) ? parseInt(value, 10)  : this.userInput;
 

@@ -67,11 +67,12 @@ export class RentalService {
       maxLng?: number;
       minLng?: number;
     },
-    limit?:number,
+    limit ?:number,
     page?:number,
     userId?: string,
   ): Promise<RentalEntity[]> {
-    console.log({ bounds });
+   
+    console.log(limit,"ss")
 
     // const lngTolerance = 180 / Math.pow(2, 2 * (zoom - 10));
     // console.log({ lngTolerance });
@@ -87,7 +88,7 @@ export class RentalService {
         user_id: userId,
       }),
     };
-
+    
     const latQueryObj = {
       ...(bounds.minLat &&
         bounds.maxLat && {
@@ -111,10 +112,10 @@ export class RentalService {
     const [Rentals, totalCount] = await Promise.all([
       this.prismaService.rentals.findMany({
         ...(
-          limit !== 0 && {take: limit}
+        limit !== 0 && {take: limit}
         ),
         ...(
-          limit !== 0 && {skip: limit * page}
+         limit !== 0 && {skip: limit * page}
         ),
         include: {
           images: {
@@ -140,12 +141,8 @@ export class RentalService {
         },
       }),
     ]);
-    console.log(Rentals?.length);
-    console.log({totalCount});
-    
-    console.log({hasMore : (totalCount - limit * page) % limit < 1 ? false : true });
-    
 
+  
     if (Rentals?.length) {
       return Rentals.map((Rental) => new RentalEntity(Rental));
     } else {
