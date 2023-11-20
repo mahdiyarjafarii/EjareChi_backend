@@ -169,7 +169,8 @@ export class RentalController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() productUpdateDTO: RentalUpdateReq,
     @User() user?: UserType,
-  ): Promise<RentalEntity> {
+  ) {
+
     // try {
     //   //for finde creator of home with id in query
     //   const userCreator = await this.rentalService.getUserIdByhomeId(id);

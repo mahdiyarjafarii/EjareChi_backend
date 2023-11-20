@@ -92,9 +92,9 @@ export class RentalUpdateReq {
   @IsOptional()
   subsetprovince?:string
   
-  @IsArray()
-  @IsOptional()
-  images?: string[];
+  // @IsArray()
+  // @IsOptional()
+  // images?: string[];
 
   @IsNumber()
   @IsOptional()

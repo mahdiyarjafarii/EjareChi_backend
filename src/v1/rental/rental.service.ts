@@ -187,7 +187,6 @@ export class RentalService {
       category_id,
       latitude,
       longitude,
-      images,
       Strictness_number,
       province,
       subsetprovince
@@ -206,6 +205,7 @@ export class RentalService {
           longitude,
           price,
           province,
+          Strictness_number,
           subsetprovince,          
         },
         include: {
