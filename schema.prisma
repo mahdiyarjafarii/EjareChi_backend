@@ -20,6 +20,7 @@ model users {
   favoriteIds     String[]
   rentals      rentals[]
   reservations Reservations[]
+  comments Comment[]
 }
 
 model rentals {
@@ -41,6 +42,7 @@ model rentals {
   created_at  DateTime       @default(now())
   updated_at  DateTime       @updatedAt
   reservations Reservations[]
+   comments Comment[]
 }
 
 model RentalImages {
@@ -92,6 +94,22 @@ approved           Boolean              @default(false)
 user             users    @relation(fields: [user_id], references: [user_id])
 rental           rentals  @relation(fields: [rental_id], references: [rental_id])
 
+}
+
+
+model Comment {
+  comment_id String   @id @default(uuid())
+  content    String
+  starsNumber Float    @default(5) 
+  user_id    String
+  rental_id  String
+  approved   Boolean  @default(false) 
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Relations
+  user   users    @relation(fields: [user_id], references: [user_id])
+  rental rentals  @relation(fields: [rental_id], references: [rental_id])
 }
 
 // TODO : 

@@ -17,6 +17,7 @@ import { ReservationModule } from './v1/reservation/reservation.module';
 import { ContextModule } from './infrastructure/context/context.module';
 // import { SearchModule } from './infrastructure/elasticsearch/elasticsearch.module';
 import { NotificationModule } from './v1/notification/notification.module';
+import { CommentModule } from './v1/comment/comment.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { NotificationModule } from './v1/notification/notification.module';
     SearchModule,
     UserModule,
     MailModule,
+    CommentModule,
     // ClsModule.forRoot({
     //   middleware: {
     //     //global: true,
