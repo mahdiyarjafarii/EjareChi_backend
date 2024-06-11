@@ -9,7 +9,7 @@ RUN npm i
 COPY . .
 
 RUN npm run build
-RUN npm prisma db push
+RUN npx prisma db push
 RUN npx prisma generate
 
 
