@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: a5f{0790I+n8
       POSTGRES_DB: rentals
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ejareiipg:/var/lib/postgresql/data
   # redis:
   #   image: redis
   #   container_name: ejareii_redis
@@ -34,6 +34,6 @@ services:
 
 
 volumes:
-  #ejareiipg:
-  pgdata:
+  ejareiipg:
+  # pgdata:
   ejareiiredis:
